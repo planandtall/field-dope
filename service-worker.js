@@ -1,5 +1,5 @@
 /* Field Dope service worker — cache-first, versioned. */
-const CACHE = "field-dope-v3.2-pwa-1";
+const CACHE = "field-dope-v3.2-pwa-2";
 const ASSETS = [
   "./",
   "./index.html",

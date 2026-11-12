@@ -704,7 +704,7 @@ let S=C.clone(C.DEFAULTS), storageOK=true, readOK=true;
       const g=S.rigs&&S.rigs.l350;
       const up=o=>{ if(!o) return; if(+o.bbl===20) o.bbl=22; if(o.load==="ftx") o.load="il"; if(o.cardLoad==="ftx") o.cardLoad="il"; };
       up(g); if(S.rifle==="l350") up(S);
-      if(+S.cLat===35.5947&&+S.cLon===-97.6386){ S.cLat=35.51; S.cLon=-97.76; }
+      if(Math.abs(+S.cLat-35.6)<0.05&&Math.abs(+S.cLon+97.64)<0.05){ S.cLat=35.51; S.cLon=-97.76; }
     }
     S.dataRev=2; }
   else { // first run of v3: carry landmarks, scope height and chrono speeds over from the older versions
