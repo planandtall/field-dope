@@ -1,0 +1,1178 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#14170f">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Field Dope">
+<meta name="format-detection" content="telephone=no">
+<title>RPR .308 Field Dope</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<style>
+:root{
+  --bg:#14170f; --panel:#1d2216; --panel2:#262c1c; --line:#3a422b;
+  --ink:#ece7d2; --dim:#9aa183; --blaze:#f26419; --go:#a9b665; --warn:#e3b23c; --bad:#e0533d; --hl:#2e2416; --well:#0f120b;
+  --sans:"Avenir Next","Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --cond:"Avenir Next Condensed","Arial Narrow","Roboto Condensed","Segoe UI",sans-serif;
+  --mono:ui-monospace,Menlo,Consolas,"Roboto Mono",monospace;
+}
+body.sun{--bg:#f4f1e6;--panel:#ffffff;--panel2:#ebe6d3;--line:#8d8a77;--ink:#111;--dim:#4a4a3c;--blaze:#c2410c;--go:#3f6212;--warn:#92400e;--bad:#b91c1c;--hl:#fde7d6;--well:#fff}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);-webkit-text-size-adjust:100%}
+body{padding:env(safe-area-inset-top) env(safe-area-inset-right) calc(60px + env(safe-area-inset-bottom)) env(safe-area-inset-left)}
+.wrap{max-width:760px;margin:0 auto;padding:0 14px}
+header{padding:16px 2px 10px;border-bottom:2px solid var(--line)}
+.hd{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.kick{font-family:var(--mono);font-size:10px;letter-spacing:.14em;color:var(--dim);line-height:1.5}
+h1{font-family:var(--cond);font-weight:700;font-size:34px;line-height:1;margin:6px 0 2px;letter-spacing:.01em}
+h1 span{color:var(--blaze)}
+.sub{font-size:12.5px;color:var(--dim)}
+nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);display:flex;gap:6px;padding:10px 0;border-bottom:1px solid var(--line)}
+nav button{flex:1;background:var(--panel);color:var(--dim);border:1px solid var(--line);border-radius:8px;padding:10px 4px;font:600 14px var(--cond);letter-spacing:.08em;text-transform:uppercase}
+nav button.on{background:var(--blaze);color:#1a0e05;border-color:var(--blaze)}
+body.sun nav button.on{color:#fff}
+section.tab{display:none;padding-top:12px}
+section.tab.on{display:block}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px;margin-bottom:12px}
+.tag{font-family:var(--mono);font-size:10px;letter-spacing:.18em;color:var(--dim);margin-bottom:8px;text-transform:uppercase}
+.seg{display:flex;gap:6px;flex-wrap:wrap}
+.seg button{flex:1;min-width:0;background:var(--panel2);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:9px 6px;font:600 13px var(--sans);line-height:1.15}
+.seg button small{display:block;font-weight:400;color:var(--dim);font-size:11px;margin-top:2px}
+.seg button.on{border-color:var(--blaze);box-shadow:inset 0 0 0 1px var(--blaze);background:var(--hl)}
+.row{display:flex;align-items:center;gap:8px}
+.big{font-family:var(--mono);font-size:30px;font-weight:600}
+.unit{color:var(--dim);font-size:13px}
+input[type=range]{width:100%;accent-color:var(--blaze);height:30px}
+.inp,select{background:var(--panel2);color:var(--ink);border:1px solid var(--line);border-radius:7px;padding:9px 10px;font:15px var(--mono);width:100%}
+.inp:focus,select:focus,button:focus-visible{outline:2px solid var(--blaze);outline-offset:1px}
+.btn{background:var(--panel2);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:9px 12px;font:600 14px var(--mono)}
+.btn.blaze{background:var(--blaze);border-color:var(--blaze);color:#1a0e05}
+body.sun .btn.blaze{color:#fff}
+.btn:disabled{opacity:.4}
+.btn.full{width:100%;margin-top:8px}
+.nudge{display:flex;gap:6px;margin-top:6px}
+.nudge .btn{flex:1;padding:8px 0}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.grid2>*{min-width:0}
+label.l{display:block;font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--dim);margin:8px 0 4px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.chip{background:var(--panel2);border:1px dashed var(--line);color:var(--ink);border-radius:20px;padding:6px 11px;font:13px var(--sans)}
+.chip b{font-family:var(--mono);color:var(--go)}
+.out{background:var(--well);border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:12px}
+.oline{display:flex;justify-content:space-between;align-items:flex-end;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)}
+.oline:last-of-type{border-bottom:0}
+.oline>div:first-child{flex:0 0 auto}
+.olab{font-family:var(--mono);font-size:10px;letter-spacing:.14em;color:var(--dim);text-transform:uppercase;max-width:190px}
+.oval{font-family:var(--cond);font-weight:700;font-size:40px;line-height:1.05;color:var(--blaze);white-space:nowrap}
+.oval.w{color:var(--go)}
+.odet{flex:1 1 auto;min-width:0;font-size:13px;color:var(--ink);text-align:right;line-height:1.35}
+.odet .d{color:var(--dim)}
+.lockbar{font:600 13px var(--mono);background:var(--hl);border:1px solid var(--blaze);border-radius:8px;padding:8px 10px;margin-bottom:6px}
+.note{font-size:13px;line-height:1.45;color:var(--ink);background:var(--panel2);border-left:3px solid var(--go);padding:9px 11px;border-radius:0 7px 7px 0;margin-top:10px}
+.note.warn{border-left-color:var(--warn)}
+.note.bad{border-left-color:var(--bad)}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:10px}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:7px 6px;text-align:center}
+.stat b{display:block;font:600 16px var(--mono)}
+.stat span{font-size:10px;color:var(--dim);letter-spacing:.06em;text-transform:uppercase}
+.ret{display:flex;justify-content:center}
+.ret svg{width:100%;max-width:360px;height:auto}
+ol.seq,ol.chk{margin:6px 0 0;padding-left:20px;font-size:14px;line-height:1.6}
+.tw{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{border-collapse:collapse;width:100%;font-family:var(--mono);font-size:12.5px}
+th,td{padding:6px 5px;text-align:center;border-bottom:1px solid var(--line);white-space:nowrap}
+th{color:var(--dim);font-weight:500;font-size:10.5px;letter-spacing:.04em}
+td.r{color:var(--go);font-weight:600}
+td.c{color:var(--blaze);font-weight:600}
+tr.hl td{background:var(--hl)}
+#dopeTbl,#fallback table{font-size:11.5px}
+#dopeTbl th,#dopeTbl td,#fallback th,#fallback td{padding:5px 2px}
+#fallback th{line-height:1.15}
+.cmp td,.cmp th{padding:7px 4px;font-size:13px}
+.cmp tr.sel td{background:var(--panel2)}
+.cmp tr[data-k]{cursor:pointer}
+.cmp td.k{text-align:left;font-family:var(--sans);white-space:normal;max-width:84px}
+.strip{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;margin-top:8px}
+.strip div{background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:6px 3px;text-align:center;font:12px var(--mono);line-height:1.3}
+.strip div b{display:block;color:var(--go)}
+.strip div.at{border-color:var(--blaze)}
+.p{font-size:14px;line-height:1.55;margin:6px 0}
+.small{font-size:12px;color:var(--dim);line-height:1.45}
+.small b,.p b{color:var(--ink)}
+.cons{font-size:11.5px;color:var(--dim);margin-top:8px;line-height:1.4}
+.mark{display:flex;gap:6px;margin-bottom:6px}
+.mark .inp{flex:1}
+.mark .inp.n{flex:0 0 84px}
+.mark .btn{flex:0 0 auto}
+.pill{display:inline-block;font:600 10px var(--mono);letter-spacing:.08em;text-transform:uppercase;border:1px solid var(--line);border-radius:20px;padding:3px 8px;color:var(--dim)}
+.pill.ok{color:var(--go);border-color:var(--go)}
+.pill.no{color:var(--warn);border-color:var(--warn)}
+.sunbtn{flex:0 0 auto;margin-top:4px;padding:8px 10px;font:700 12px var(--mono);letter-spacing:.1em}
+a{color:var(--go)}
+.chk label{display:flex;gap:8px;align-items:flex-start;font-size:13px;margin-top:8px}
+.chk input{width:20px;height:20px;flex:0 0 auto;accent-color:var(--blaze)}
+.sunpair{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px}
+.sunpair .oval{font-size:34px}
+#sunNow>.olab{max-width:none}
+.odet.l{text-align:left;margin-top:4px}
+.seg.places button{flex:1 1 30%}
+.seg.two button{flex:1 1 45%}
+.seg.rifles{margin-top:10px}
+.seg.rifles button{font-size:14px;padding:10px 6px}
+.suntbl td.wh{text-align:left;font-family:var(--sans);white-space:normal;font-size:11.5px;color:var(--dim);max-width:118px}
+.suntbl td.wh.hunt{color:var(--go);font-weight:600}
+#fallback h2{font:700 20px var(--cond);margin:14px 0 4px}
+#fallback h3{font:700 15px var(--sans);margin:0 0 2px}
+@media (max-width:420px){.oval{font-size:31px}.olab{font-size:9px;letter-spacing:.08em;max-width:130px}.odet{font-size:12px}.stats{grid-template-columns:repeat(2,1fr)}h1{font-size:30px}}
+@media print{
+  html,body{background:#fff!important;color:#000;padding:0}
+  #app header,nav,.noprint,section.tab{display:none!important}
+  section#tab-card{display:block!important}
+  .card{background:#fff;border:1px solid #000;color:#000;break-inside:avoid}
+  th,td{border-bottom:1px solid #999;color:#000!important;background:#fff!important}
+  .tag,.small,.small b{color:#000}
+  .tw{overflow:visible}
+  table{font-size:9.5px}
+  th,td{padding:3px 2px}
+}
+</style>
+</head>
+<body>
+
+<!-- ============ FIXED TABLES: shown only when the calculator below is not running ============ -->
+<div class="wrap" id="fallback">
+  <header>
+    <div class="kick">RPR .308 · .350 LEGEND · FIXED REFERENCE TABLES</div>
+    <h1>FIELD <span>DOPE</span></h1>
+    <div class="sub">This viewer isn't running the calculator (the iPhone Files preview never does), so you're seeing the fixed tables. They work as they are. For the live calculator, open this file in <b>Documents by Readdle</b>.</div>
+  </header>
+  <div id="fallbackTables"><div class="card"><p class="p"><b>Wind rule.</b> Wind from <b>3 o'clock</b> (your right) pushes the bullet left: dial <b>RIGHT</b> the clicks shown, or hold that far into the wind. From 9 o'clock, dial LEFT. From 2, 4, 8 or 10 use about ⅞ (9 of every 10 clicks); from 1, 5, 7 or 11 use half; 12 or 6, none. The table is 10 mph: 5 mph is half, 20 mph double.</p><p class="p"><b>Clicks</b> are UP from your zero, ¼ MOA each. <b>Turret</b> is the number the elevation turret should read. <b>Cold</b> is the same shot at 25°F, for the first hour of a frosty morning. <b>Wind clicks</b> are for 10 mph full value. <b>Hold</b> is where the vitals go below center if you don't dial.</p></div><h2>RPR .308</h2><div class="small" style="margin-bottom:8px">50°F · 1200 ft · 100-yd zero set at 70°F · scope 2″ over bore · 20″ barrel · reticle hashes 2 MOA apart; “2+” just past the 2, “4−” just short of the 4, “mid” halfway. Spin drift is in the note under each table, not in the wind column.</div><div class="card"><h3>Federal Fusion 150 · default</h3><div class="small">F308FS1 · Bonded soft point: holds together and exits. Your primary deer load. MV used 2700 fps at 50°F (book 2820 from a 24″ test barrel) · G1 .414. Center hold stays inside an 8″ vital zone to <b>204 yd</b>.</div><div class="tw"><table><tr><th>Yd</th><th>UP<br>clicks</th><th>Turret<br>reads</th><th>Cold<br>25°F</th><th>Wind<br>clicks</th><th>Hold</th><th>fps</th></tr><tr class="hl"><td class="r">100</td><td class="c">0</td><td>0</td><td>0</td><td>3</td><td>ctr</td><td>2489</td></tr><tr><td class="r">125</td><td class="c">1</td><td>¼</td><td>1</td><td>4</td><td>0+</td><td>2437</td></tr><tr><td class="r">150</td><td class="c">3</td><td>¾</td><td>3</td><td>5</td><td>0+</td><td>2387</td></tr><tr><td class="r">175</td><td class="c">5</td><td>1¼</td><td>5</td><td>6</td><td>0–2 mid</td><td>2337</td></tr><tr class="hl"><td class="r">200</td><td class="c">7</td><td>1¾</td><td>8</td><td>6</td><td>on 2</td><td>2287</td></tr><tr><td class="r">225</td><td class="c">10</td><td>2½</td><td>10</td><td>7</td><td>2+</td><td>2238</td></tr><tr><td class="r">250</td><td class="c">12</td><td>3</td><td>13</td><td>8</td><td>2–4 mid</td><td>2190</td></tr><tr><td class="r">275</td><td class="c">15</td><td>3¾</td><td>16</td><td>9</td><td>4−</td><td>2142</td></tr><tr class="hl"><td class="r">300</td><td class="c">18</td><td>4½</td><td>19</td><td>10</td><td>4+</td><td>2095</td></tr><tr><td class="r">325</td><td class="c">21</td><td>5¼</td><td>22</td><td>11</td><td>4–6 mid</td><td>2048</td></tr><tr><td class="r">350</td><td class="c">24</td><td>6</td><td>25</td><td>12</td><td>on 6</td><td>2002</td></tr><tr><td class="r">375</td><td class="c">27</td><td>6¾</td><td>29</td><td>13</td><td>6–8 mid</td><td>1957</td></tr><tr class="hl"><td class="r">400</td><td class="c">31</td><td>7¾</td><td>32</td><td>14</td><td>8−</td><td>1912</td></tr></table></div><div class="small">Spin drift, with no wind: at 300 yd hold ¼ MOA left (1 click); at 400 yd hold ¼ MOA left (1 click). Add it to a wind from your left, take it off a wind from your right.</div></div><div class="card"><h3>Winchester Ballistic Silvertip 168</h3><div class="small">SBST308A · Polymer tip, not bonded: fast expansion. Drops a little more than the 150s and drifts about 8% less in wind. MV used 2550 fps at 50°F (book 2670 from a 24″ test barrel) · G1 .474. Center hold stays inside an 8″ vital zone to <b>196 yd</b>.</div><div class="tw"><table><tr><th>Yd</th><th>UP<br>clicks</th><th>Turret<br>reads</th><th>Cold<br>25°F</th><th>Wind<br>clicks</th><th>Hold</th><th>fps</th></tr><tr class="hl"><td class="r">100</td><td class="c">0</td><td>0</td><td>0</td><td>3</td><td>ctr</td><td>2371</td></tr><tr><td class="r">125</td><td class="c">2</td><td>½</td><td>2</td><td>4</td><td>0+</td><td>2327</td></tr><tr><td class="r">150</td><td class="c">3</td><td>¾</td><td>4</td><td>4</td><td>0–2 mid</td><td>2284</td></tr><tr><td class="r">175</td><td class="c">6</td><td>1½</td><td>6</td><td>5</td><td>2−</td><td>2241</td></tr><tr class="hl"><td class="r">200</td><td class="c">8</td><td>2</td><td>9</td><td>6</td><td>on 2</td><td>2199</td></tr><tr><td class="r">225</td><td class="c">11</td><td>2¾</td><td>12</td><td>7</td><td>2+</td><td>2157</td></tr><tr><td class="r">250</td><td class="c">14</td><td>3½</td><td>15</td><td>8</td><td>4−</td><td>2116</td></tr><tr><td class="r">275</td><td class="c">17</td><td>4¼</td><td>18</td><td>9</td><td>on 4</td><td>2075</td></tr><tr class="hl"><td class="r">300</td><td class="c">20</td><td>5</td><td>21</td><td>9</td><td>4–6 mid</td><td>2034</td></tr><tr><td class="r">325</td><td class="c">23</td><td>5¾</td><td>24</td><td>10</td><td>on 6</td><td>1994</td></tr><tr><td class="r">350</td><td class="c">27</td><td>6¾</td><td>28</td><td>11</td><td>6+</td><td>1955</td></tr><tr><td class="r">375</td><td class="c">30</td><td>7½</td><td>32</td><td>12</td><td>8−</td><td>1916</td></tr><tr class="hl"><td class="r">400</td><td class="c">34</td><td>8½</td><td>36</td><td>13</td><td>8+</td><td>1877</td></tr></table></div><div class="small">Spin drift, with no wind: at 300 yd hold ¼ MOA left (1 click); at 400 yd hold ¼ MOA left (1 click). Add it to a wind from your left, take it off a wind from your right.</div></div><div class="card"><h3>Hornady American Whitetail Tipped 150 SST</h3><div class="small">80934 · SST polymer tip, not bonded: fast expansion. Flies within a click of Fusion to 500. MV used 2690 fps at 50°F (book 2810 from a 24″ test barrel) · G1 .415. Center hold stays inside an 8″ vital zone to <b>203 yd</b>.</div><div class="tw"><table><tr><th>Yd</th><th>UP<br>clicks</th><th>Turret<br>reads</th><th>Cold<br>25°F</th><th>Wind<br>clicks</th><th>Hold</th><th>fps</th></tr><tr class="hl"><td class="r">100</td><td class="c">0</td><td>0</td><td>0</td><td>3</td><td>ctr</td><td>2480</td></tr><tr><td class="r">125</td><td class="c">1</td><td>¼</td><td>1</td><td>4</td><td>0+</td><td>2429</td></tr><tr><td class="r">150</td><td class="c">3</td><td>¾</td><td>3</td><td>5</td><td>0+</td><td>2378</td></tr><tr><td class="r">175</td><td class="c">5</td><td>1¼</td><td>5</td><td>6</td><td>0–2 mid</td><td>2328</td></tr><tr class="hl"><td class="r">200</td><td class="c">7</td><td>1¾</td><td>8</td><td>6</td><td>on 2</td><td>2279</td></tr><tr><td class="r">225</td><td class="c">10</td><td>2½</td><td>10</td><td>7</td><td>2+</td><td>2230</td></tr><tr><td class="r">250</td><td class="c">12</td><td>3</td><td>13</td><td>8</td><td>2–4 mid</td><td>2182</td></tr><tr><td class="r">275</td><td class="c">15</td><td>3¾</td><td>16</td><td>9</td><td>on 4</td><td>2135</td></tr><tr class="hl"><td class="r">300</td><td class="c">18</td><td>4½</td><td>19</td><td>10</td><td>4+</td><td>2088</td></tr><tr><td class="r">325</td><td class="c">21</td><td>5¼</td><td>22</td><td>11</td><td>6−</td><td>2041</td></tr><tr><td class="r">350</td><td class="c">24</td><td>6</td><td>25</td><td>12</td><td>on 6</td><td>1995</td></tr><tr><td class="r">375</td><td class="c">28</td><td>7</td><td>29</td><td>13</td><td>6–8 mid</td><td>1950</td></tr><tr class="hl"><td class="r">400</td><td class="c">31</td><td>7¾</td><td>33</td><td>14</td><td>on 8</td><td>1906</td></tr></table></div><div class="small">Spin drift, with no wind: at 300 yd hold ¼ MOA left (1 click); at 400 yd hold ¼ MOA left (1 click). Add it to a wind from your left, take it off a wind from your right.</div></div><h2>.350 Legend</h2><div class="small" style="margin-bottom:8px">50°F · 1200 ft · 100-yd zero set at 70°F · scope 1.8″ over bore · 22″ barrel · Crossfire II BDC, true at 9×: H1, H2, H3 are the 1st, 2nd and 3rd hash (2, 4.6, 7.8 MOA), “post” the top of the bottom post (11.4); “+” just past, “−” just short. No wind marks: wind clicks ÷ 4 = MOA to hold by eye. Spin drift is in the note under each table, not in the wind column.</div><div class="card"><h3>Hornady American Whitetail 170 InterLock · default</h3><div class="small">81196 · Exposed-lead soft point with Hornady's InterLock ring holding core and jacket together. Your working .350 deer load. MV used 2230 fps at 50°F (book 2200 from a 20″ test barrel) · G1 .215. Center hold stays inside an 8″ vital zone to <b>163 yd</b>.</div><div class="tw"><table><tr><th>Yd</th><th>UP<br>clicks</th><th>Turret<br>reads</th><th>Cold<br>25°F</th><th>Wind<br>clicks</th><th>Hold</th><th>fps</th></tr><tr class="hl"><td class="r">100</td><td class="c">0</td><td>0</td><td>1</td><td>8</td><td>ctr</td><td>1874</td></tr><tr><td class="r">125</td><td class="c">3</td><td>¾</td><td>4</td><td>11</td><td>0–H1 mid</td><td>1791</td></tr><tr><td class="r">150</td><td class="c">7</td><td>1¾</td><td>8</td><td>13</td><td>on H1</td><td>1710</td></tr><tr><td class="r">175</td><td class="c">11</td><td>2¾</td><td>12</td><td>15</td><td>H1+</td><td>1632</td></tr><tr class="hl"><td class="r">200</td><td class="c">16</td><td>4</td><td>17</td><td>18</td><td>H2−</td><td>1558</td></tr><tr><td class="r">225</td><td class="c">21</td><td>5¼</td><td>23</td><td>21</td><td>H2+</td><td>1486</td></tr><tr><td class="r">250</td><td class="c">27</td><td>6¾</td><td>29</td><td>23</td><td>H3−</td><td>1418</td></tr><tr><td class="r">275</td><td class="c">33</td><td>8¼</td><td>35</td><td>26</td><td>H3+</td><td>1354</td></tr><tr class="hl"><td class="r">300</td><td class="c">40</td><td>10</td><td>42</td><td>29</td><td>H3–post mid</td><td>1295</td></tr></table></div><div class="small">Spin drift, with no wind: at 300 yd hold ¼ MOA left (1 click). Add it to a wind from your left, take it off a wind from your right.</div></div><div class="card"><h3>Hornady American Whitetail Tipped 165 FTX</h3><div class="small">81197 · Flex Tip, fast expansion. It fragmented on your deer in October, so it's the backup, not the deer load. MV used 2130 fps at 50°F (book 2200 from a 24″ test barrel) · G1 .250. Center hold stays inside an 8″ vital zone to <b>161 yd</b>.</div><div class="tw"><table><tr><th>Yd</th><th>UP<br>clicks</th><th>Turret<br>reads</th><th>Cold<br>25°F</th><th>Wind<br>clicks</th><th>Hold</th><th>fps</th></tr><tr class="hl"><td class="r">100</td><td class="c">0</td><td>0</td><td>1</td><td>7</td><td>ctr</td><td>1830</td></tr><tr><td class="r">125</td><td class="c">4</td><td>1</td><td>4</td><td>10</td><td>0–H1 mid</td><td>1759</td></tr><tr><td class="r">150</td><td class="c">8</td><td>2</td><td>8</td><td>12</td><td>on H1</td><td>1691</td></tr><tr><td class="r">175</td><td class="c">12</td><td>3</td><td>13</td><td>14</td><td>H1–H2 mid</td><td>1624</td></tr><tr class="hl"><td class="r">200</td><td class="c">17</td><td>4¼</td><td>18</td><td>16</td><td>H2−</td><td>1560</td></tr><tr><td class="r">225</td><td class="c">22</td><td>5½</td><td>24</td><td>18</td><td>H2+</td><td>1499</td></tr><tr><td class="r">250</td><td class="c">28</td><td>7</td><td>30</td><td>21</td><td>H3−</td><td>1439</td></tr><tr><td class="r">275</td><td class="c">34</td><td>8½</td><td>36</td><td>23</td><td>H3+</td><td>1383</td></tr><tr class="hl"><td class="r">300</td><td class="c">41</td><td>10¼</td><td>43</td><td>26</td><td>post−</td><td>1330</td></tr></table></div><div class="small">Spin drift, with no wind: at 300 yd hold ¼ MOA left (1 click). Add it to a wind from your left, take it off a wind from your right.</div></div><div class="card"><h3>Legal shooting light · your hunt days</h3><div class="small">Computed Wed 11/11/2026. Open = 30 min before sunrise, Close = 30 min after sunset (AR and OK deer). Morning AM, evening PM.</div><div class="tw"><table class="suntbl"><tr><th>Date</th><th style="text-align:left">Where</th><th>Open</th><th>Rise</th><th>Set</th><th>Close</th></tr><tr class="hl"><td class="r">Wed 11/11</td><td class="wh">Home</td><td class="c">6:33</td><td>7:03</td><td>5:27</td><td class="c">5:57</td></tr><tr class=""><td class="r">Thu 11/12</td><td class="wh">Home</td><td class="c">6:34</td><td>7:04</td><td>5:26</td><td class="c">5:56</td></tr><tr class=""><td class="r">Fri 11/13</td><td class="wh hunt">Falling Sky · arrive</td><td class="c">6:14</td><td>6:44</td><td>5:04</td><td class="c">5:34</td></tr><tr class=""><td class="r">Sat 11/14</td><td class="wh hunt">Falling Sky West</td><td class="c">6:15</td><td>6:45</td><td>5:03</td><td class="c">5:33</td></tr><tr class=""><td class="r">Sun 11/15</td><td class="wh hunt">Falling Sky West</td><td class="c">6:16</td><td>6:46</td><td>5:03</td><td class="c">5:33</td></tr><tr class=""><td class="r">Mon 11/16</td><td class="wh hunt">Falling Sky West</td><td class="c">6:17</td><td>6:47</td><td>5:02</td><td class="c">5:32</td></tr><tr class=""><td class="r">Tue 11/17</td><td class="wh hunt">Warren Prairie</td><td class="c">6:11</td><td>6:41</td><td>5:04</td><td class="c">5:34</td></tr><tr class=""><td class="r">Wed 11/18</td><td class="wh hunt">Warren Prairie</td><td class="c">6:12</td><td>6:42</td><td>5:03</td><td class="c">5:33</td></tr><tr class=""><td class="r">Thu 11/19</td><td class="wh">Home</td><td class="c">6:41</td><td>7:11</td><td>5:22</td><td class="c">5:52</td></tr><tr class=""><td class="r">Fri 11/20</td><td class="wh">Home</td><td class="c">6:42</td><td>7:12</td><td>5:22</td><td class="c">5:52</td></tr><tr class=""><td class="r">Sat 11/21</td><td class="wh hunt">Latimer</td><td class="c">6:48</td><td>7:18</td><td>5:20</td><td class="c">5:50</td></tr><tr class=""><td class="r">Sun 11/22</td><td class="wh hunt">Latimer</td><td class="c">6:49</td><td>7:19</td><td>5:20</td><td class="c">5:50</td></tr><tr class=""><td class="r">Mon 11/23</td><td class="wh hunt">Latimer</td><td class="c">6:50</td><td>7:20</td><td>5:19</td><td class="c">5:49</td></tr></table></div></div></div>
+</div>
+
+<div class="wrap" id="app" hidden>
+<header><div class="hd"><div>
+  <div class="kick" id="kick"></div>
+  <h1 id="hTitle"></h1>
+  <div class="sub">Works offline · v3.2</div>
+</div><button class="btn sunbtn noprint" id="sunBtn" aria-pressed="false">☀ SUN</button></div>
+</header>
+<div class="seg rifles noprint" id="rifleSeg"></div>
+<nav>
+  <button data-t="shot" class="on">Shot</button>
+  <button data-t="range">Range</button>
+  <button data-t="sun">Sun</button>
+  <button data-t="card">Card</button>
+  <button data-t="setup">Setup</button>
+</nav>
+
+<!-- ================= SHOT ================= -->
+<section class="tab on" id="tab-shot">
+  <div class="card">
+    <div class="tag">01 · Load in the rifle</div>
+    <div class="seg" id="loadSeg"></div>
+    <div class="cons" id="loadCons"></div>
+  </div>
+
+  <div class="card">
+    <div class="tag">02 · Range</div>
+    <div class="row"><input id="rngNum" class="inp big" type="number" inputmode="numeric" min="25" max="500" step="1" style="max-width:140px"><span class="unit">yards</span></div>
+    <input id="rngSl" type="range" min="25" max="500" step="5" aria-label="Range">
+    <div class="nudge"><button class="btn" data-n="-25">−25</button><button class="btn" data-n="-5">−5</button><button class="btn" data-n="5">+5</button><button class="btn" data-n="25">+25</button></div>
+    <div class="chips" id="markChips"></div>
+  </div>
+
+  <div class="card">
+    <div class="tag">03 · Wind &amp; temperature</div>
+    <div class="row"><span class="big" id="windVal">10</span><span class="unit">mph</span></div>
+    <input id="windSl" type="range" min="0" max="30" step="1" aria-label="Wind speed">
+    <label class="l">Wind coming FROM (tap the clock — you face 12, the deer)</label>
+    <div class="ret"><svg id="clock" viewBox="0 0 220 220" style="max-width:270px"></svg></div>
+    <div class="small" id="clockTxt" style="text-align:center"></div>
+    <label class="l" style="margin-top:14px">Air temperature</label>
+    <div class="row"><span class="big" id="tempVal">45</span><span class="unit">°F</span></div>
+    <input id="tempSl" type="range" min="0" max="95" step="5" aria-label="Temperature">
+  </div>
+
+  <div class="card">
+    <div class="tag">04 · How you'll take it</div>
+    <div class="seg" id="methodSeg">
+      <button data-v="dialhold">Dial up · hold wind<small>the default</small></button>
+      <button data-v="hold">Hold both<small>turrets stay at zero</small></button>
+      <button data-v="dial">Dial both<small>calm deer, steady wind</small></button>
+    </div>
+    <div class="cons">Dial a correction or hold it — never both for the same correction, or you've applied it twice.</div>
+  </div>
+
+  <div class="out" id="out"></div>
+
+  <div class="card">
+    <div class="tag">Through the scope</div>
+    <div class="seg" id="picSeg" style="margin-bottom:10px"><button data-v="hold">Holding<small>turret at 0</small></button><button data-v="dial">After dialing<small>turret as set above</small></button></div>
+    <div class="ret"><svg id="ret" viewBox="-150 -150 300 300"></svg></div>
+    <div class="small" id="retTxt" style="text-align:center;margin-top:6px"></div>
+  </div>
+
+  <div class="card">
+    <div class="tag">Second deer · turret already dialed</div>
+    <div id="second"></div>
+  </div>
+
+  <div class="card" id="cmpCard">
+    <div class="tag" id="cmpTag">All loads · same shot</div>
+    <div class="tw"><table class="cmp" id="cmpTbl"></table></div>
+    <div class="small" style="margin-top:6px">Tap a row to switch loads.</div>
+  </div>
+
+  <div class="card">
+    <div class="tag">The sequence</div>
+    <ol class="seq">
+      <li><b>Range it.</b> Rangefinder first, landmark card second, reticle last.</li>
+      <li><b>Inside the dead-on window?</b> Crosshair on the front-leg crease and shoot. Don't touch the turret.</li>
+      <li><b>Past it: dial UP</b> to the turret number shown. Read the number rather than counting clicks.</li>
+      <li><b>Wind: hold into it.</b> The vitals sit on the downwind side of the reticle; the crosshair ends up upwind.</li>
+      <li><b>Squeeze, follow through,</b> and watch how she reacts and where she goes.</li>
+      <li><b>Turrets back to zero</b> before you leave the gun, unless a second deer is standing there. Then lock the dial above and use the second-deer box.</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ================= RANGE ================= -->
+<section class="tab" id="tab-range">
+  <div class="card">
+    <div class="tag">The first question · is she inside the dead-on window?</div>
+    <p class="p" id="ndRule"></p>
+  </div>
+
+  <div class="card">
+    <div class="tag">What you're measuring</div>
+    <div class="seg" id="refSeg">
+      <button data-v="13">13″<small>yearling doe</small></button>
+      <button data-v="15">15″<small>adult Ozark doe</small></button>
+      <button data-v="17">17″<small>mature buck</small></button>
+      <button data-v="obj">Object<small>known size</small></button>
+    </div>
+    <div class="grid2">
+      <div><label class="l">Size (inches)</label><input id="refSize" class="inp" type="number" step="0.5" min="4" max="240"></div>
+      <div><label class="l">Could be off by ± (in)</label><input id="refUnc" class="inp" type="number" step="0.5" min="0" max="20"></div>
+    </div>
+    <p class="small" id="refHint" style="margin-top:8px"></p>
+  </div>
+
+  <div class="card">
+    <div class="tag">Read the reticle → get the range</div>
+    <label class="l" id="readLab">It spans this many MOA</label>
+    <div class="row"><input id="readMoa" class="inp big" type="number" inputmode="decimal" step="0.5" min="1" max="60" style="max-width:150px"><span class="unit" id="readGaps"></span></div>
+    <div class="nudge"><button class="btn" data-m="-1">−1</button><button class="btn" data-m="-0.5">−½</button><button class="btn" data-m="0.5">+½</button><button class="btn" data-m="1">+1</button></div>
+    <div class="out" style="margin-top:10px;margin-bottom:0">
+      <div class="oline"><div><div class="olab">Estimated range</div><div class="oval w" id="estRng">—</div></div>
+      <div class="odet" id="estDet"></div></div>
+    </div>
+    <div class="note" id="estVerdict"></div>
+    <button class="btn blaze full" id="useRng">Use this range → Shot</button>
+    <p class="small" style="margin-top:8px" id="rangeNote"></p>
+  </div>
+
+  <div class="card">
+    <div class="tag">Lookup · what she looks like at each range</div>
+    <div class="tw"><table id="rngTbl"></table></div>
+    <p class="small"><b>Calibrate it:</b> tape every deer you kill at Falling Sky back-to-brisket, just behind the front leg, before you gut it, and set the reference to your own average. Two or three does beat any book number.</p>
+  </div>
+
+  <div class="card">
+    <div class="tag">Landmark range card</div>
+    <p class="p">The first evening at camp, laser every place a deer can step out — each chicken tractor, the pond dam, fence corners, the gate — and write them here. After that a deer showing up is a lookup instead of a guess. They appear as one-tap ranges on the Shot tab.</p>
+    <div id="markList"></div>
+    <div class="mark"><input id="mkName" class="inp" maxlength="40" placeholder="Landmark (e.g. chicken tractor #2)"><input id="mkYd" class="inp n" type="number" inputmode="numeric" placeholder="yd"><button class="btn blaze" id="mkAdd">Add</button></div>
+    <p class="small">Saved in this browser. Use Setup → Download to bake them into the file.</p>
+  </div>
+</section>
+
+<!-- ================= SUN ================= -->
+<section class="tab" id="tab-sun">
+  <div class="card">
+    <div class="tag">Where</div>
+    <div class="seg places" id="placeSeg"></div>
+    <div class="grid2" id="customBox" style="margin-top:6px">
+      <div><label class="l">Latitude</label><input id="cLat" class="inp" type="number" step="0.0001"></div>
+      <div><label class="l">Longitude (west is −)</label><input id="cLon" class="inp" type="number" step="0.0001"></div>
+    </div>
+  </div>
+  <div class="out" id="sunNow"></div>
+  <div class="card">
+    <div class="tag" id="sunTag"></div>
+    <div class="tw"><table class="suntbl" id="sunTbl"></table></div>
+    <p class="small" style="margin-top:8px"><b>Open</b> and <b>Close</b> are legal shooting light for deer: morning times are AM, evening PM. <b>Arkansas</b> (AGFC 2026–27): no hunting from 30 minutes after sunset to 30 minutes before sunrise. <b>Oklahoma</b> (ODWC 2026–27, deer): ½ hour before official sunrise to ½ hour after official sunset.</p>
+    <p class="small">Worked out on the phone from each spot's coordinates, so it needs no signal. It matches the USNO tables the state guides print to within a minute. A ridge to your east delays the light you can see, not the legal time.</p>
+  </div>
+</section>
+
+<!-- ================= CARD ================= -->
+<section class="tab" id="tab-card">
+  <div class="card noprint">
+    <div class="tag">Dope card settings</div>
+    <div class="seg" id="cardLoadSeg"></div>
+    <label class="l">Card temperature</label>
+    <div class="row"><span class="big" id="cardTempVal">45</span><span class="unit">°F</span></div>
+    <input id="cardTempSl" type="range" min="0" max="95" step="5" aria-label="Card temperature">
+    <div class="grid2"><button class="btn blaze full" id="printBtn">Print / save as PDF</button><button class="btn full" id="csvBtn">Export CSV</button></div>
+    <p class="small" style="margin-top:8px">Print this and tape it to the stock. A phone dies in the cold; paper doesn't.</p>
+  </div>
+  <div class="card">
+    <div class="tag" id="cardTitle"></div>
+    <div class="tw"><table id="dopeTbl"></table></div>
+    <p class="small" id="cardNote"></p>
+  </div>
+  <div class="card">
+    <div class="tag">Temperature shift · elevation clicks up</div>
+    <div class="tw"><table id="tempTbl"></table></div>
+    <p class="small" id="tempNote"></p>
+  </div>
+</section>
+
+<!-- ================= SETUP ================= -->
+<section class="tab" id="tab-setup">
+
+  <div class="card">
+    <div class="tag">Rifle &amp; zero</div>
+    <div class="grid2">
+      <div><label class="l">Zero range (yd)</label><input class="inp" type="number" data-s="zero"></div>
+      <div><label class="l">Temp when zeroed (°F)</label><input class="inp" type="number" data-s="zeroT"></div>
+      <div><label class="l">Scope height over bore (in)</label><input class="inp" type="number" step="0.05" data-s="sh"></div>
+      <div><label class="l">Hunt elevation (ft)</label><input class="inp" type="number" step="100" data-s="alt"></div>
+      <div><label class="l">Your barrel (in)</label><input class="inp" type="number" step="0.5" data-s="bbl"></div>
+      <div><label class="l">Velocity loss (fps per inch)</label><input class="inp" type="number" step="1" data-s="fpsIn"></div>
+      <div><label class="l">Powder temp shift (fps per °F)</label><input class="inp" type="number" step="0.1" data-s="tsens"></div>
+      <div><label class="l">Vital zone diameter (in)</label><input class="inp" type="number" step="0.5" data-s="vital"></div>
+    </div>
+    <label class="l" id="spinLab">Spin drift</label>
+    <div class="seg" id="spinSeg"><button data-v="1">Include</button><button data-v="0">Ignore</button></div>
+    <p class="small" style="margin-top:8px"><b>Scope height</b> is center of bore to center of scope. Measure the gap from the bottom of the scope tube to the top of the bolt body, then add half the tube (0.59″ for 30 mm, 0.50″ for 1″) and about 0.35″ (half the bolt). A ¼″ error is worth about one click at 500. <b>Velocity:</b> each factory speed comes from that maker's test barrel (listed under Loads); the default moves it 25 fps for every inch your barrel is shorter or longer. A chronograph reading under Loads replaces that estimate.</p>
+  </div>
+
+  <div class="card">
+    <div class="tag">Scope &amp; reticle</div>
+    <div class="seg two" id="retSeg">
+      <button data-v="ebr">EBR-2C MOA<small>FFP · 2-MOA hashes</small></button>
+      <button data-v="swbdc">Straight-Wall BDC<small>SFP · true at 9×</small></button>
+      <button data-v="ffp">Other FFP<small>set hash spacing</small></button>
+      <button data-v="sfp">Second focal plane<small>true at one power</small></button>
+    </div>
+    <div class="grid2">
+      <div><label class="l">Hash spacing (MOA)</label><input class="inp" type="number" step="0.5" data-s="hashMoa"></div>
+      <div><label class="l">Click value (MOA)</label><input class="inp" type="number" step="0.125" data-s="click"></div>
+      <div><label class="l">Turret MOA per turn</label><input class="inp" type="number" step="1" data-s="rev"></div>
+    </div>
+    <div class="grid2" id="sfpBox">
+      <div><label class="l">Marks are true at (power)</label><input class="inp" type="number" step="1" data-s="calPow"></div>
+      <div><label class="l">Power you'll use</label><input class="inp" type="number" step="1" data-s="curPow"></div>
+    </div>
+    <p class="small" style="margin-top:8px" id="retNote">Your RPR came with a Vortex Diamondback Tactical 6–24×50 FFP. Its EBR-2C MOA reticle has a hash every <b>2 MOA</b>, and the numbers printed on it are MOA, not yards and not a hash count. First focal plane means the hashes are true at every magnification, so range and hold at whatever power lets you see the deer best. <b>Reticle check:</b> the first hash below center is unnumbered and the second reads 4; at 100 yd the first hash covers about 2.1″. <b>Tall-target check:</b> at 100 yd, dial UP 20 clicks and fire; the hole should land about 5.2″ above your zero group. Dial back down and confirm it returns.</p>
+  </div>
+
+  <div class="card">
+    <div class="tag">Loads · your data overrides the book</div>
+    <div id="loadSetup"></div>
+    <p class="small"><b>Chrono MV</b> is your measured average from this rifle (blank uses book minus barrel loss). <b>100-yd offset:</b> if this load prints high or right of your zero at 100, enter the inches (negative = low or left) and the whole card shifts with it. That lets every load run off one zero.</p>
+  </div>
+
+  <div class="card">
+    <div class="tag">Keep your settings</div>
+    <button class="btn blaze full" id="saveHtml" style="margin-top:0">Download this file with my settings baked in</button>
+    <p class="small" style="margin-top:8px">Settings and landmarks are remembered by this browser, but a phone can clear that. The download carries them inside the file, and its fixed tables are rebuilt from your numbers.</p>
+    <button class="btn full" id="resetBtn">Reset settings to defaults (keeps landmarks)</button>
+  </div>
+
+  <div class="card">
+    <div class="tag">Sources &amp; limits</div>
+    <p class="small"><b>Fusion 150</b> — Federal F308FS1, 2820 fps, G1 .414, bonded. Federal lists 1,900 fps as the minimum for reliable expansion. <a href="https://www.federalpremium.com/rifle/fusion/11-F308FS1.html" target="_blank" rel="noopener">Federal</a></p>
+    <p class="small"><b>Ballistic Silvertip 168</b> — Winchester SBST308A, 2670 fps, G1 .474, polymer tip, not bonded. Some tables list .490; only .474 reproduces Winchester's own downrange velocities, so .474 is used. <a href="https://winchester.com/Products/Ammunition/Rifle/Ballistic-Silvertip/SBST308A" target="_blank" rel="noopener">Winchester</a></p>
+    <p class="small"><b>American Whitetail Tipped 150 SST</b> — Hornady 80934, 2810 fps, G1 .415, polymer tip, not bonded. <a href="https://www.hornady.com/ammunition/rifle/308-win-150-gr-sst-american-whitetail-tipped" target="_blank" rel="noopener">Hornady</a></p>
+    <p class="small"><b>.350 Legend 170 InterLock</b> — Hornady 81196 (American Whitetail), 2200 fps from a <b>20″</b> test barrel, G1 .215. That BC reproduces Hornady's own downrange speeds (1843 / 1529 / 1271 fps at 100 / 200 / 300) within 1 fps. <a href="https://www.hornady.com/ammunition/rifle/350-legend-170-gr-interlock-american-whitetail" target="_blank" rel="noopener">Hornady</a></p>
+    <p class="small"><b>.350 Legend 165 FTX</b> — Hornady 81197 (American Whitetail Tipped), 2200 fps from a <b>24″</b> test barrel, G1 .250 as Hornady lists it; that reproduces 1890 / 1612 / 1371 fps within 1 fps. Neither .350 load has a published expansion floor, so the tool doesn't flag one. <a href="https://www.hornady.com/ammunition/rifle/350-legend-165-gr-ftx-tipped" target="_blank" rel="noopener">Hornady</a></p>
+    <p class="small"><b>.350 barrel</b> — Ruger lists 22″ for the American Predator Gen II in .350 Legend, so that's the default. With the 25 fps/in estimate that puts InterLock at about 2250 fps and FTX at about 2150. A chronograph number beats both.</p>
+    <p class="small"><b>Crossfire II Straight-Wall BDC</b> — second focal plane, marks true at 9×: 1st hash 2 MOA, 2nd 4.6, 3rd 7.8, top of the bottom post 11.4, per Vortex's reticle manual. No wind marks on the crossbar.</p>
+    <p class="small"><b>Engine:</b> point-mass, standard G1 drag table, RK4. Checked against the makers' own trajectory tables at their standard atmospheres: within 0.15″ of path and 3 fps at every 100 yd to 500 for the three .308 loads, and within 1 fps to 300 for both .350 loads. That proves the math, not your rifle. Expansion minimums for the two tipped bullets are not published; 1,800 fps is an estimate. Wind is treated as steady the whole way, which it never is. Not modeled: uphill or downhill angle, Coriolis.</p>
+    <p class="small">Links need signal. Nothing else in this file does.</p>
+  </div>
+</section>
+</div>
+
+<script id="savedConfig" type="application/json">{}</script>
+
+<script id="core">
+/* ===== Pure ballistics + card logic. No DOM. Also loadable from node for testing. ===== */
+var CORE=(function(){
+"use strict";
+/* Standard G1 drag function (BRL table as published by JBM): [Mach, Cd] */
+const G1=[[0,.2629],[.05,.2558],[.1,.2487],[.15,.2413],[.2,.2344],[.25,.2278],[.3,.2214],[.35,.2155],[.4,.2104],[.45,.2061],[.5,.2032],[.55,.2020],[.6,.2034],[.7,.2165],[.725,.2230],[.75,.2313],[.775,.2417],[.8,.2546],[.825,.2706],[.85,.2901],[.875,.3136],[.9,.3415],[.925,.3734],[.95,.4084],[.975,.4448],[1,.4805],[1.025,.5136],[1.05,.5427],[1.075,.5677],[1.1,.5883],[1.125,.6053],[1.15,.6191],[1.2,.6393],[1.25,.6518],[1.3,.6589],[1.35,.6621],[1.4,.6625],[1.45,.6607],[1.5,.6573],[1.55,.6528],[1.6,.6474],[1.65,.6413],[1.7,.6347],[1.75,.6280],[1.8,.6210],[1.85,.6141],[1.9,.6072],[1.95,.6003],[2,.5934],[2.05,.5867],[2.1,.5804],[2.15,.5743],[2.2,.5685],[2.25,.5630],[2.3,.5577],[2.35,.5527],[2.4,.5481],[2.45,.5438],[2.5,.5397],[2.6,.5325],[2.7,.5264],[2.8,.5211],[2.9,.5168],[3,.5133],[3.1,.5105],[3.2,.5084],[3.3,.5067],[3.4,.5054],[3.5,.5040],[3.6,.5030],[3.7,.5022],[3.8,.5016],[3.9,.5010],[4,.5006],[4.2,.4998],[4.4,.4995],[4.6,.4992],[4.8,.4990],[5,.4988]];
+function cd(m){ if(m<=0) return G1[0][1]; let lo=0,hi=G1.length-1; if(m>=G1[hi][0]) return G1[hi][1];
+  while(hi-lo>1){ const k=(lo+hi)>>1; if(G1[k][0]<=m) lo=k; else hi=k; }
+  const a=G1[lo],b=G1[hi]; return a[1]+(b[1]-a[1])*(m-a[0])/(b[0]-a[0]); }
+/* rr = air density relative to ICAO sea level; standard pressure for the altitude, dry air */
+function atmo(T,alt,rrOverride){ const P=Math.pow(1-6.8755856e-6*alt,5.2558797), TR=T+459.67;
+  return { rr:(rrOverride!==undefined?rrOverride:P*518.67/TR), sos:49.0223*Math.sqrt(TR) }; }
+const KD=0.0023769*Math.PI*32.174/(8*144);          // decel = KD*rr/BC * Cd(Mach) * v^2  (ft/s^2)
+const MOA_IN=1.0472;                                // inches per MOA per 100 yd
+/* x downrange, y up from line of sight, z to the shooter's RIGHT. Samples every yard. */
+function fly(mv,bc,ang,yaw,shIn,env,wx,wz,maxYd){
+  const k=KD*env.rr/bc, sos=env.sos, G=32.174, dt=0.001;
+  let s=[0,-shIn/12,0, mv*Math.cos(ang)*Math.cos(yaw), mv*Math.sin(ang), mv*Math.cos(ang)*Math.sin(yaw)], t=0;
+  const f=q=>{ const rx=q[3]-wx, ry=q[4], rz=q[5]-wz, vr=Math.hypot(rx,ry,rz), a=k*cd(vr/sos)*vr;
+    return [q[3],q[4],q[5],-a*rx,-a*ry-G,-a*rz]; };
+  const out=[{yd:0,y:-shIn,z:0,v:mv,t:0}]; let next=1;
+  while(next<=maxYd && t<4){
+    const k1=f(s), k2=f(s.map((v,i)=>v+dt/2*k1[i])), k3=f(s.map((v,i)=>v+dt/2*k2[i])), k4=f(s.map((v,i)=>v+dt*k3[i]));
+    const n=s.map((v,i)=>v+dt/6*(k1[i]+2*k2[i]+2*k3[i]+k4[i]));
+    while(next<=maxYd && n[0]>=next*3){ const fr=(next*3-s[0])/(n[0]-s[0]), L=i=>s[i]+fr*(n[i]-s[i]);
+      out.push({yd:next,y:L(1)*12,z:L(2)*12,v:Math.hypot(L(3),L(4),L(5)),t:t+fr*dt}); next++; }
+    s=n; t+=dt; if(s[3]<100) break;
+  }
+  return out;
+}
+
+const LOADS={
+  fus:{rifle:"rpr",name:"Federal Fusion 150",short:"Fusion 150",sku:"F308FS1",gr:150,mv:2820,tb:24,bc:0.414,minV:1900,minSrc:"Federal spec",role:"Bonded · holds together",sg:2.9,
+       cons:"Bonded soft point: holds together and exits. Your primary deer load."},
+  bst:{rifle:"rpr",name:"Winchester Ballistic Silvertip 168",short:"BST 168",sku:"SBST308A",gr:168,mv:2670,tb:24,bc:0.474,minV:1800,minSrc:"estimate",role:"Tipped · least wind drift",sg:2.6,
+       cons:"Polymer tip, not bonded: fast expansion. Drops a little more than the 150s and drifts about 8% less in wind."},
+  awt:{rifle:"rpr",name:"Hornady American Whitetail Tipped 150 SST",short:"AWT 150 SST",sku:"80934",gr:150,mv:2810,tb:24,bc:0.415,minV:1800,minSrc:"estimate",role:"Tipped · fast expansion",sg:2.9,
+       cons:"SST polymer tip, not bonded: fast expansion. Flies within a click of Fusion to 500."},
+  il:{rifle:"l350",name:"Hornady American Whitetail 170 InterLock",short:"InterLock 170",sku:"81196",gr:170,mv:2200,tb:20,bc:0.215,minV:null,minSrc:"not published",role:"Soft point · your .350 default",sg:1.6,
+       cons:"Exposed-lead soft point with Hornady's InterLock ring holding core and jacket together. Your working .350 deer load."},
+  ftx:{rifle:"l350",name:"Hornady American Whitetail Tipped 165 FTX",short:"FTX 165",sku:"81197",gr:165,mv:2200,tb:24,bc:0.250,minV:null,minSrc:"not published",role:"Flex Tip · fragments",sg:1.5,
+       cons:"Flex Tip, fast expansion. It fragmented on your deer in October, so it's the backup, not the deer load."}
+};
+function blankLo(){ return {mv:"",up:0,rt:0}; }
+const RIFLES={
+  rpr:{far:400,name:"RPR .308",sub:"Diamondback FFP",h1:'RPR .308 <span>FIELD DOPE</span>',twist:"1:10",cardMax:500,tempR:[200,250,300,350,400,450,500],tempAt:[300,400],
+    kick:S=>"RUGER PRECISION RIFLE · .308 WIN · "+S.bbl+"″<br>DIAMONDBACK TACTICAL 6–24×50 FFP · EBR-2C MOA · ¼-MOA CLICKS",
+    d:{load:"fus",cardLoad:"fus",method:"dialhold",zero:100,zeroT:70,sh:2.0,bbl:20,testBbl:24,fpsIn:25,tsens:1.0,spin:1,ret:"ebr",hashMoa:2,click:0.25,rev:15,calPow:24,curPow:24,lo:{fus:blankLo(),bst:blankLo(),awt:blankLo()}},
+    retNote:'Your RPR came with a Vortex Diamondback Tactical 6–24×50 FFP. Its EBR-2C MOA reticle has a hash every <b>2 MOA</b>, and the numbers printed on it are MOA, not yards and not a hash count. First focal plane means the hashes are true at every magnification, so range and hold at whatever power lets you see the deer best. <b>Reticle check:</b> the first hash below center is unnumbered and the second reads 4; at 100 yd the first hash covers about 2.1″. <b>Tall-target check:</b> at 100 yd, dial UP 20 clicks and fire; the hole should land about 5.2″ above your zero group. Dial back down and confirm it returns.'},
+  l350:{far:250,name:".350 Legend",sub:"Crossfire II BDC",h1:'.350 LEGEND <span>FIELD DOPE</span>',twist:"1:16",cardMax:300,tempR:[100,150,175,200,225,250,300],tempAt:[200,250],
+    kick:S=>"RUGER AMERICAN PREDATOR GEN II · .350 LEGEND · "+S.bbl+"″<br>VORTEX CROSSFIRE II 3–9×50 · STRAIGHT-WALL BDC · ¼-MOA CLICKS",
+    d:{load:"il",cardLoad:"il",method:"hold",zero:100,zeroT:70,sh:1.8,bbl:22,testBbl:24,fpsIn:25,tsens:1.0,spin:1,ret:"swbdc",hashMoa:2,click:0.25,rev:15,calPow:9,curPow:9,lo:{il:blankLo(),ftx:blankLo()}},
+    retNote:'The Crossfire II 3–9×50 Straight-Wall BDC is <b>second focal plane</b>: the marks are only true at <b>9×</b>, so crank it to 9 before you hold or range with them. Below center: <b>1st hash 2 MOA</b>, <b>2nd 4.6</b>, <b>3rd 7.8</b>, <b>top of the bottom post 11.4</b>. Vortex labels them 150 / 230 / 280 / 340 yd for a different 150-gr load out of a 16″ barrel. Ignore those yardages; the hold readout uses your load. The crossbar has no wind marks, so wind is held by eye. Turrets are capped, ¼ MOA, 15 MOA a turn.'}
+};
+const RKEYS=["load","cardLoad","method","zero","zeroT","sh","bbl","testBbl","fpsIn","tsens","spin","ret","hashMoa","click","rev","calPow","curPow","lo"];
+function order(S){ return Object.keys(LOADS).filter(k=>LOADS[k].rifle===(S.rifle||"rpr")); }
+const BDC=[{v:2,n:"1st hash",s:"H1"},{v:4.6,n:"2nd hash",s:"H2"},{v:7.8,n:"3rd hash",s:"H3"},{v:11.4,n:"top of the post",s:"post"}];
+const DEFAULTS={
+  v:3, dataRev:2, savedAt:0, load:"fus", range:200, wind:10, clock:3, temp:45, cardTemp:45, cardLoad:"fus", method:"dialhold", sun:0,
+  zero:100, zeroT:70, sh:2.0, alt:1200, bbl:20, testBbl:24, fpsIn:25, tsens:1.0, vital:8, spin:1,
+  ret:"ebr", hashMoa:2, click:0.25, rev:15, calPow:24, curPow:24,
+  refMode:"deer", deerIn:15, deerUnc:1.5, objIn:48, objUnc:0, read:5, readUnc:0.5,
+  dialYd:null, dialE:0, dialW:0, pic:"hold", place:"plan", cLat:35.51, cLon:-97.76,
+  lo:{fus:blankLo(),bst:blankLo(),awt:blankLo()}, marks:[],
+  rifle:"rpr", rigs:{rpr:JSON.parse(JSON.stringify(RIFLES.rpr.d)), l350:JSON.parse(JSON.stringify(RIFLES.l350.d))}
+};
+const LIM={ zero:[25,300,1], zeroT:[-20,115,0], sh:[0.5,4,0], alt:[-500,12000,0], bbl:[10,30,0], testBbl:[16,30,0],
+  fpsIn:[0,50,0], tsens:[0,5,0], click:[0.05,1,0], rev:[5,40,0], vital:[3,14,0], hashMoa:[0.25,10,0], calPow:[1,40,0], curPow:[1,40,0],
+  range:[25,500,1], wind:[0,30,1], temp:[0,95,0], cardTemp:[0,95,0], clock:[0,11,1],
+  deerIn:[8,24,0], deerUnc:[0,6,0], cLat:[18,72,0], cLon:[-170,-60,0], objIn:[4,240,0], objUnc:[0,20,0], read:[1,60,0], readUnc:[0,3,0] };
+function clone(o){ return JSON.parse(JSON.stringify(o)); }
+function fix(k,v){ const L=LIM[k]; if(!L) return v; v=+v; if(!Number.isFinite(v)) v=DEFAULTS[k];
+  v=Math.max(L[0],Math.min(L[1],v)); return L[2]?Math.round(v):v; }
+function sanitize(S){
+  if(!RIFLES[S.rifle]) S.rifle="rpr";
+  if(!S.rigs||typeof S.rigs!=="object") S.rigs={};
+  for(const r in RIFLES){ const g=(S.rigs[r]&&typeof S.rigs[r]==="object")?S.rigs[r]:(S.rigs[r]={}); for(const k of RKEYS) if(!(k in g)) g[k]=clone(RIFLES[r].d[k]); }
+  for(const k in LIM) S[k]=fix(k,S[k]);
+  const ord=order(S); if(ord.indexOf(S.load)<0) S.load=ord[0]; if(ord.indexOf(S.cardLoad)<0) S.cardLoad=ord[0];
+  if(["dialhold","hold","dial"].indexOf(S.method)<0) S.method="dialhold";
+  if(["ebr","ffp","sfp","swbdc"].indexOf(S.ret)<0) S.ret="ebr";
+  if(S.ret==="ebr") S.hashMoa=2;
+  if(S.refMode!=="obj") S.refMode="deer";
+  if(S.pic!=="dial") S.pic="hold";
+  if(!PLACES[S.place]) S.place="plan";
+  S.spin=S.spin?1:0; S.sun=S.sun?1:0;
+  if(!S.lo||typeof S.lo!=="object") S.lo={};
+  for(const k of ord){ const o=(S.lo[k]&&typeof S.lo[k]==="object")?S.lo[k]:(S.lo[k]=blankLo());
+    if(o.mv!==""&&!(+o.mv>=1000&&+o.mv<=3500)) o.mv="";
+    o.up=Math.max(-12,Math.min(12,+o.up||0)); o.rt=Math.max(-12,Math.min(12,+o.rt||0)); delete o.ok; }
+  if(!Array.isArray(S.marks)) S.marks=[];
+  S.marks=S.marks.filter(m=>m&&m.name&&Number.isFinite(+m.yd)).slice(0,24).map(m=>({name:String(m.name).slice(0,40),yd:fix("range",m.yd)}));
+  for(const k of RKEYS) S.rigs[S.rifle][k]=clone(S[k]);          // keep the active rifle's stored copy current
+  if(S.dialYd!==null){ const d=+S.dialYd; if(!(d>=25&&d<=500)){ S.dialYd=null; S.dialE=0; S.dialW=0; } else { S.dialYd=Math.round(d); S.dialE=Math.round(+S.dialE||0); S.dialW=Math.round(+S.dialW||0); } }
+  return S;
+}
+
+/* swap the rifle-specific settings in and out; turret lock never carries across rifles */
+function switchRifle(S,r){ if(!RIFLES[r]||r===S.rifle) return S;
+  for(const k of RKEYS) S.rigs[S.rifle][k]=clone(S[k]);
+  S.rifle=r; for(const k of RKEYS) S[k]=clone(S.rigs[r][k]);
+  S.dialYd=null; S.dialE=0; S.dialW=0; return sanitize(S); }
+function rifleView(S,r){ return switchRifle(clone(S),r); }
+function kick(S){ return RIFLES[S.rifle].kick(S); }
+
+/* muzzle velocity: chrono if entered, else book minus barrel loss; shifted for powder temperature from 70F */
+function bookMv(S,id){ const L=LOADS[id]; return L.mv-((L.tb||S.testBbl)-S.bbl)*S.fpsIn; }     // factory speed moved to your barrel length
+function baseMv(S,id){ const o=S.lo[id]; return (o.mv!==""&&+o.mv>=1000)?+o.mv:bookMv(S,id); }
+function mvFor(S,id,T){ return baseMv(S,id)+(T-70)*S.tsens; }
+const zc={};
+function zeroAng(S,id){
+  const key=[id,S.zero,S.zeroT,S.sh,S.alt,baseMv(S,id),S.tsens].join("|");
+  if(zc[key]!==undefined) return zc[key];
+  const mv=mvFor(S,id,S.zeroT), env=atmo(S.zeroT,S.alt), bc=LOADS[id].bc; let lo=-0.01,hi=0.05;
+  for(let i=0;i<45;i++){ const m=(lo+hi)/2; if(fly(mv,bc,m,0,S.sh,env,0,0,S.zero)[S.zero].y>0) hi=m; else lo=m; }
+  return zc[key]=(lo+hi)/2;
+}
+/* Full solution. el = MOA of correction UP needed, wd = MOA of correction RIGHT needed (negative = left). */
+function solve(S,id,T,mph,clock,maxYd){
+  maxYd=Math.max(maxYd||500,S.zero);
+  const o=S.lo[id], L=LOADS[id];
+  const ang=zeroAng(S,id)+(+o.up||0)/3600, yaw=(+o.rt||0)/3600;      // a load printing high/right at 100 leaves higher/right
+  const W=mph*22/15, al=clock*Math.PI/6;                              // wind FROM the clock direction; air moves the other way
+  const r=fly(mvFor(S,id,T),L.bc,ang,yaw,S.sh,atmo(T,S.alt),-W*Math.cos(al),-W*Math.sin(al),maxYd);
+  const kS=1.25*(L.sg+1.2), tz=(r[S.zero]||r[r.length-1]).t, sdZ=kS*Math.pow(tz,1.83);
+  return r.map(p=>{
+    const sd=S.spin? kS*Math.pow(p.t,1.83)-sdZ*p.yd/S.zero : 0;    // right-hand twist drifts right; the part at the zero range is already zeroed out
+    const mi=p.yd*MOA_IN/100, z=p.z+sd;
+    return {yd:p.yd,y:p.y,z:z,v:p.v,t:p.t,e:L.gr*p.v*p.v/450240, el:p.yd?-p.y/mi:0, wd:p.yd?-z/mi:0};
+  });
+}
+function noDialMax(S,sol){ const lim=S.vital/2; let last=0, inw=false;      // far end of the window (it can start a few yards out with a tall scope)
+  for(const p of sol){ if(p.yd<10) continue; if(Math.abs(p.y)<=lim){ last=p.yd; inw=true; } else if(inw) break; } return last; }
+
+/* ---- reticle + turret wording ---- */
+function isSfp(S){ return S.ret==="sfp"||S.ret==="swbdc"; }
+function retScale(S){ return isSfp(S) ? S.calPow/Math.max(1,S.curPow) : 1; }   // true MOA per printed MOA
+function num(v){ return String(Math.round(v*100)/100); }
+function q(m){ const v=Math.round(Math.abs(m)*4)/4, w=Math.floor(v), f=v-w;
+  const fr=f===0.25?"¼":f===0.5?"½":f===0.75?"¾":""; return (w===0&&fr)?fr:(w+fr); }
+/* where a hold of trueMoa falls among the printed marks; axis "h" = the crossbar (wind) */
+function holdWords(S,trueMoa,axis){
+  const a=Math.abs(trueMoa)/retScale(S), st=S.hashMoa;
+  if(a<0.25) return {long:"on center",short:"ctr"};
+  if(S.ret==="swbdc"){
+    if(axis==="h") return {long:q(a)+" MOA",short:q(a)};                 // no wind marks on this crossbar
+    const M=[{v:0,n:"center",s:"0"}].concat(BDC), last=M[M.length-1];
+    for(let i=1;i<M.length;i++) if(Math.abs(a-M[i].v)<=0.3) return {long:"on the "+M[i].n,short:"on "+M[i].s};
+    if(a>last.v) return {long:q(a-last.v)+" MOA below the top of the post",short:"post+"+q(a-last.v)};
+    let i=0; while(i<M.length-1&&M[i+1].v<a) i++;
+    const fr=(a-M[i].v)/(M[i+1].v-M[i].v), A=i?"the "+M[i].n:"center", B="the "+M[i+1].n;
+    if(Math.abs(fr-0.5)<=0.15) return {long:"halfway between "+A+" and "+B,short:M[i].s+"–"+M[i+1].s+" mid"};
+    return fr<0.5?{long:"just past "+A+", toward "+B,short:M[i].s+"+"}:{long:"just short of "+B,short:M[i+1].s+"−"};
+  }
+  const n=a/st, lo=Math.floor(n+1e-9), fr=n-lo, lv=num(lo*st), hv=num((lo+1)*st), L=lo===0?"center":"the "+lv+" hash";
+  if(fr<0.13) return {long:"on "+L,short:"on "+lv};
+  if(fr>0.87) return {long:"on the "+hv+" hash",short:"on "+hv};
+  if(Math.abs(fr-0.5)<=0.13) return {long:"halfway between "+L+" and the "+hv+" hash",short:(lo?lv:"0")+"–"+hv+" mid"};
+  return fr<0.5 ? {long:"just past "+L+", toward the "+hv,short:(lo?lv:"0")+"+"}
+                : {long:"just short of the "+hv+" hash",short:hv+"−"};
+}
+function retDesc(S){ return S.ret==="swbdc" ? "BDC marks sit 2, 4.6 and 7.8 MOA below center, post top at 11.4 (true at "+S.calPow+"×)" : "hashes are "+num(S.hashMoa)+" MOA apart"; }
+function spanText(S,trueMoa){ if(S.ret==="swbdc") return "center to "+holdWords(S,trueMoa).long.replace(/^on /,"");
+  return (Math.abs(trueMoa)/retScale(S)/S.hashMoa).toFixed(1)+" hash gaps"; }
+function turretRead(S,clicks){ const moa=Math.abs(clicks)*S.click, rev=Math.floor(moa/S.rev+1e-9), rem=moa-rev*S.rev;
+  return q(rem)+(rev?" +"+rev+" turn"+(rev>1?"s":""):""); }
+
+/* ---- sun: NOAA solar position, standard refraction (zenith 90.833 deg) ---- */
+const rad=d=>d*Math.PI/180, deg=r=>r*180/Math.PI;
+function jdOf(y,m,d){ if(m<=2){y-=1;m+=12;} const A=Math.floor(y/100), B=2-A+Math.floor(A/4); return Math.floor(365.25*(y+4716))+Math.floor(30.6001*(m+1))+d+B-1524.5; }
+function sunGeom(jd){ const t=(jd-2451545)/36525;
+  let L0=(280.46646+t*(36000.76983+t*0.0003032))%360; if(L0<0) L0+=360;
+  const M=357.52911+t*(35999.05029-0.0001537*t), e=0.016708634-t*(0.000042037+0.0000001267*t);
+  const Cc=Math.sin(rad(M))*(1.914602-t*(0.004817+0.000014*t))+Math.sin(rad(2*M))*(0.019993-0.000101*t)+Math.sin(rad(3*M))*0.000289;
+  const om=125.04-1934.136*t, lam=L0+Cc-0.00569-0.00478*Math.sin(rad(om));
+  const eps=23+(26+(21.448-t*(46.815+t*(0.00059-t*0.001813)))/60)/60+0.00256*Math.cos(rad(om));
+  const dec=deg(Math.asin(Math.sin(rad(eps))*Math.sin(rad(lam))));
+  let y=Math.tan(rad(eps)/2); y*=y;
+  const E=y*Math.sin(2*rad(L0))-2*e*Math.sin(rad(M))+4*e*y*Math.sin(rad(M))*Math.cos(2*rad(L0))-0.5*y*y*Math.sin(4*rad(L0))-1.25*e*e*Math.sin(2*rad(M));
+  return {dec:dec,eqt:deg(E)*4}; }
+/* minutes after 00:00 UTC of the civil date; lon east-positive */
+function riseSetUTC(rise,y,m,d,lat,lon){ const jd0=jdOf(y,m,d); let tm=720-4*lon+(rise?-360:360);
+  for(let i=0;i<3;i++){ const g=sunGeom(jd0+tm/1440);
+    const c=Math.cos(rad(90.833))/(Math.cos(rad(lat))*Math.cos(rad(g.dec)))-Math.tan(rad(lat))*Math.tan(rad(g.dec));
+    if(c>1||c<-1) return NaN; let ha=deg(Math.acos(c)); if(!rise) ha=-ha; tm=720-4*(lon+ha)-g.eqt; }
+  return tm; }
+const PLACES={
+  plan:{name:"My hunts",sub:"place by date"},
+  fs:{name:"Falling Sky",sub:"Leslie, AR",lat:35.8295,lon:-92.5574,st:"AR"},
+  wp:{name:"Warren Prairie",sub:"Drew Co., AR",lat:33.567169,lon:-91.964032,st:"AR"},
+  lat:{name:"Latimer",sub:"Byron, OK",lat:36.9017,lon:-98.2934,st:"OK"},
+  home:{name:"Home",sub:"Yukon / OKC area",lat:35.51,lon:-97.76,st:"OK"},
+  custom:{name:"Custom",sub:"lat / long"}
+};
+const SCHED=[
+  {from:"2026-11-13",to:"2026-11-13",p:"fs",what:"Falling Sky · arrive"},
+  {from:"2026-11-14",to:"2026-11-16",p:"fs",what:"Falling Sky West"},
+  {from:"2026-11-17",to:"2026-11-18",p:"wp",what:"Warren Prairie"},
+  {from:"2026-11-21",to:"2026-11-23",p:"lat",what:"Latimer"}
+];
+const LEGAL={AR:{b:30,a:30},OK:{b:30,a:30}};
+const TZ="America/Chicago", WD=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+function mkDay(y,m,d){ const u=new Date(Date.UTC(y,m-1,d)); y=u.getUTCFullYear(); m=u.getUTCMonth()+1; d=u.getUTCDate();
+  return {y:y,m:m,d:d,wd:u.getUTCDay(),key:y+"-"+String(m).padStart(2,"0")+"-"+String(d).padStart(2,"0")}; }
+function addDays(p,n){ return mkDay(p.y,p.m,p.d+n); }
+function todayCT(now){ const ms=now===undefined?Date.now():now;
+  try{ const f=new Intl.DateTimeFormat("en-US",{timeZone:TZ,year:"numeric",month:"numeric",day:"numeric"}).formatToParts(new Date(ms)), g=t=>+f.find(x=>x.type===t).value;
+    return mkDay(g("year"),g("month"),g("day")); }
+  catch(e){ const d=new Date(ms); return mkDay(d.getFullYear(),d.getMonth()+1,d.getDate()); } }
+function fmtTime(ms,ampm){ let s;
+  try{ s=new Intl.DateTimeFormat("en-US",{timeZone:TZ,hour:"numeric",minute:"2-digit"}).format(new Date(ms)); }
+  catch(e){ const d=new Date(ms), h=d.getHours(); s=((h+11)%12+1)+":"+String(d.getMinutes()).padStart(2,"0")+(h<12?" AM":" PM"); }
+  s=s.replace(/\s/g," "); return ampm?s:s.replace(/ ?[AP]M$/,""); }
+function dayLabel(p){ return WD[p.wd]+" "+p.m+"/"+p.d; }
+function sunDay(p,lat,lon,st){ const L=LEGAL[st]||{b:30,a:30}, base=Date.UTC(p.y,p.m-1,p.d);
+  const r=riseSetUTC(true,p.y,p.m,p.d,lat,lon), s=riseSetUTC(false,p.y,p.m,p.d,lat,lon);
+  if(!Number.isFinite(r)||!Number.isFinite(s)) return null;
+  const R=base+Math.round(r)*60000, St=base+Math.round(s)*60000;
+  return {rise:R,set:St,open:R-L.b*60000,close:St+L.a*60000}; }
+function placeOn(S,key){
+  if(S.place==="plan"){ for(const h of SCHED) if(key>=h.from&&key<=h.to) return Object.assign({id:h.p,what:h.what,hunt:1},PLACES[h.p]);
+    return Object.assign({id:"home",what:"",hunt:0},PLACES.home); }
+  if(S.place==="custom") return {id:"custom",name:"Custom",sub:(+S.cLat).toFixed(3)+", "+(+S.cLon).toFixed(3),lat:+S.cLat,lon:+S.cLon,st:"",what:"",hunt:0};
+  return Object.assign({id:S.place,what:"",hunt:0},PLACES[S.place]);
+}
+function sunRows(S,start){
+  let n=10;
+  if(S.place==="plan"){ const last=SCHED[SCHED.length-1].to; n=0; let p=start; while(p.key<=last&&n<60){ n++; p=addDays(p,1); } if(n===0) n=7; }
+  const rows=[]; for(let i=0;i<n;i++){ const p=addDays(start,i), pl=placeOn(S,p.key); rows.push({p:p,pl:pl,sun:sunDay(p,pl.lat,pl.lon,pl.st)}); }
+  return rows;
+}
+function sunTableHTML(S,start){
+  const plan=S.place==="plan", rows=sunRows(S,start);
+  let h=`<tr><th>Date</th>${plan?'<th style="text-align:left">Where</th>':""}<th>Open</th><th>Rise</th><th>Set</th><th>Close</th></tr>`;
+  for(const r of rows){ const s=r.sun;
+    h+=`<tr class="${r.p.key===start.key?"hl":""}"><td class="r">${dayLabel(r.p)}</td>${plan?`<td class="wh${r.pl.hunt?" hunt":""}">${r.pl.hunt?r.pl.what:"Home"}</td>`:""}`
+      +(s?`<td class="c">${fmtTime(s.open)}</td><td>${fmtTime(s.rise)}</td><td>${fmtTime(s.set)}</td><td class="c">${fmtTime(s.close)}</td>`:`<td colspan="4">—</td>`)+`</tr>`; }
+  return h;
+}
+
+/* ---- dope card rows ---- */
+const CARD_WINDS=[5,10,15,20];
+function dopeRows(S,id,T){
+  const base=solve(S,id,T,0,3,500), ws=CARD_WINDS.map(w=>solve(S,id,T,w,3,500)), rows=[];
+  for(let yd=100;yd<=RIFLES[S.rifle].cardMax;yd+=25){ const p=base[yd], c=Math.round(p.el/S.click);
+    rows.push({yd:yd,drop:-p.y,moa:p.el,clicks:c,turret:(c<0?"−":"")+turretRead(S,c),hold:holdWords(S,p.el).short,v:p.v,e:p.e,
+      wind:ws.map(s=>Math.abs(s[yd].wd-p.wd)), spin:-p.wd, below:LOADS[id].minV?p.v<LOADS[id].minV:false}); }
+  return rows;
+}
+function condLine(S,id,T){ return RIFLES[S.rifle].name+" · "+LOADS[id].name+" · "+T+"°F · "+S.alt+" ft · MV "+Math.round(mvFor(S,id,T))+" fps · "+S.zero+"-yd zero · scope "+S.sh+"″ over bore"; }
+const FB_T=50, FB_COLD=25, FB_W=10;
+function fallbackHTML(S0){
+  let h='<div class="card"><p class="p"><b>Wind rule.</b> Wind from <b>3 o\'clock</b> (your right) pushes the bullet left: dial <b>RIGHT</b> the clicks shown, or hold that far into the wind. From 9 o\'clock, dial LEFT. From 2, 4, 8 or 10 use about ⅞ (9 of every 10 clicks); from 1, 5, 7 or 11 use half; 12 or 6, none. The table is 10 mph: 5 mph is half, 20 mph double.</p>'
+    +'<p class="p"><b>Clicks</b> are UP from your zero, ¼ MOA each. <b>Turret</b> is the number the elevation turret should read. <b>Cold</b> is the same shot at '+FB_COLD+'°F, for the first hour of a frosty morning. <b>Wind clicks</b> are for 10 mph full value. <b>Hold</b> is where the vitals go below center if you don\'t dial.</p></div>';
+  for(const rid in RIFLES){ const S=rifleView(S0,rid), R=RIFLES[rid], T=FB_T, max=Math.min(400,R.cardMax);
+  h+='<h2>'+R.name+'</h2><div class="small" style="margin-bottom:8px">'+T+'°F · '+S.alt+' ft · '+S.zero+'-yd zero set at '+S.zeroT+'°F · scope '+S.sh+'″ over bore · '+S.bbl+'″ barrel · '
+    +(S.ret==="swbdc"?'Crossfire II BDC, true at '+S.calPow+'×: H1, H2, H3 are the 1st, 2nd and 3rd hash (2, 4.6, 7.8 MOA), “post” the top of the bottom post (11.4); “+” just past, “−” just short. No wind marks: wind clicks ÷ 4 = MOA to hold by eye.'
+      :'reticle hashes '+num(S.hashMoa)+' MOA apart; “2+” just past the 2, “4−” just short of the 4, “mid” halfway.')+(S.spin?' Spin drift is in the note under each table, not in the wind column.':'')+'</div>';
+  for(const id of order(S)){ const L=LOADS[id], base=solve(S,id,T,0,3,max), cold=solve(S,id,FB_COLD,0,3,max), wnd=solve(S,id,T,FB_W,3,max), sol=base, nd=noDialMax(S,sol);
+    h+='<div class="card"><h3>'+L.name+(id===S.load?' · default':'')+'</h3><div class="small">'+L.sku+' · '+L.cons+' MV used '+Math.round(mvFor(S,id,T))+' fps at '+T+'°F (book '+L.mv+' from a '+(L.tb||S.testBbl)+'″ test barrel) · G1 '+L.bc.toFixed(3).replace(/^0/,'')+'. Center hold stays inside an '+S.vital+'″ vital zone to <b>'+nd+' yd</b>.</div><div class="tw"><table>'
+      +'<tr><th>Yd</th><th>UP<br>clicks</th><th>Turret<br>reads</th><th>Cold<br>'+FB_COLD+'°F</th><th>Wind<br>clicks</th><th>Hold</th><th>fps</th></tr>';
+    for(let yd=100;yd<=max;yd+=25){ const p=base[yd], c=Math.round(p.el/S.click), cc=Math.round(cold[yd].el/S.click), wc=Math.round(Math.abs(wnd[yd].wd-p.wd)/S.click), below=L.minV?p.v<L.minV:false;
+      h+='<tr'+(yd%100===0?' class="hl"':'')+'><td class="r">'+yd+'</td><td class="c">'+c+'</td><td>'+(c<0?'−':'')+turretRead(S,c)+'</td><td>'+cc+'</td><td>'+wc+'</td><td>'+holdWords(S,p.el).short+'</td><td>'+Math.round(p.v)+(below?' †':'')+'</td></tr>'; }
+    const sp=[max>=300?300:max,max].filter((v,i,a)=>a.indexOf(v)===i).map(y=>{ const m=-base[y].wd; return 'at '+y+' yd hold '+q(Math.abs(m))+' MOA '+(m>=0?'left':'right')+' ('+Math.round(Math.abs(m)/S.click)+' click'+(Math.round(Math.abs(m)/S.click)===1?'':'s')+')'; });
+    h+='</table></div>'+(S.spin?'<div class="small">Spin drift, with no wind: '+sp.join('; ')+'. Add it to a wind from your left, take it off a wind from your right.</div>':'')
+      +(L.minV&&base.some((p,yd)=>yd>=100&&yd<=max&&p.v<L.minV)?'<div class="small">† below the ~'+L.minV+' fps this bullet needs to expand ('+L.minSrc+').</div>':'')+'</div>';
+  } }
+  const P=clone(S0); P.place="plan"; const t=todayCT();
+  h+='<div class="card"><h3>Legal shooting light · your hunt days</h3><div class="small">Computed '+dayLabel(t)+'/'+t.y+'. Open = 30 min before sunrise, Close = 30 min after sunset (AR and OK deer). Morning AM, evening PM.</div><div class="tw"><table class="suntbl">'+sunTableHTML(P,t)+'</table></div></div>';
+  return h;
+}
+return {riseSetUTC,PLACES,SCHED,LEGAL,mkDay,addDays,todayCT,fmtTime,dayLabel,sunDay,placeOn,sunRows,sunTableHTML,G1,cd,atmo,fly,KD,MOA_IN,LOADS,RIFLES,RKEYS,BDC,bookMv,order,switchRifle,rifleView,kick,isSfp,retDesc,spanText,DEFAULTS,LIM,clone,fix,sanitize,blankLo,baseMv,mvFor,zeroAng,solve,noDialMax,retScale,num,q,holdWords,turretRead,CARD_WINDS,dopeRows,condLine,fallbackHTML,FB_T,FB_COLD,FB_W};
+})();
+if(typeof module!=="undefined"&&module.exports) module.exports=CORE;
+</script>
+
+<script id="ui">
+(function(){
+"use strict";
+const C=CORE, LOADS=C.LOADS, BDCV=C.BDC.map(m=>m.v), q=C.q, num=C.num, MI=C.MOA_IN;
+const KEY="rpr308_field_dope_v3";
+const $=s=>document.querySelector(s), $$=s=>document.querySelectorAll(s);
+function esc(t){ return String(t).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])); }
+function clamp(v,a,b){ return Math.max(a,Math.min(b,v)); }
+/* only touch the DOM when the markup really changed: replacing a button between touch-down and touch-up eats the tap */
+function setHTML(el,h){ if(el._h!==h){ el.innerHTML=h; el._h=h; } }
+
+/* ---------- state: defaults <- embedded config <- this browser (newest wins) ---------- */
+let S=C.clone(C.DEFAULTS), storageOK=true, readOK=true;
+(function load(){
+  let emb={}, loc={};
+  try{ emb=JSON.parse($("#savedConfig").textContent||"{}")||{}; }catch(e){}
+  try{ loc=JSON.parse(localStorage.getItem(KEY)||"{}")||{}; }catch(e){ storageOK=false; }
+  const seed=(+emb.savedAt||0)>(+loc.savedAt||0)?emb:loc;
+  if(seed&&seed.v===3){ for(const k in C.DEFAULTS) if(k in seed) S[k]=seed[k];
+    if((+seed.dataRev||1)<2){ // v3.1 -> v3.2: .350 barrel is 22", InterLock 170 is the .350 default, home is the general area only
+      const g=S.rigs&&S.rigs.l350;
+      const up=o=>{ if(!o) return; if(+o.bbl===20) o.bbl=22; if(o.load==="ftx") o.load="il"; if(o.cardLoad==="ftx") o.cardLoad="il"; };
+      up(g); if(S.rifle==="l350") up(S);
+      if(+S.cLat===35.5947&&+S.cLon===-97.6386){ S.cLat=35.51; S.cLon=-97.76; }
+    }
+    S.dataRev=2; }
+  else { // first run of v3: carry landmarks, scope height and chrono speeds over from the older versions
+    for(const old of ["rpr308_field_dope_v2","rpr308_field_dope_v1"]){
+      try{ const o=JSON.parse(localStorage.getItem(old)||"null"); if(!o) continue;
+        if(Array.isArray(o.marks)) S.marks=o.marks; if(o.sh) S.sh=o.sh; if(o.alt) S.alt=o.alt;
+        if(o.lo) for(const k of C.order(S)) if(o.lo[k]&&o.lo[k].mv) S.lo[k].mv=o.lo[k].mv;
+        break; }catch(e){}
+    }
+  }
+  C.sanitize(S);
+})();
+function save(){ C.sanitize(S); S.savedAt=Date.now(); try{ localStorage.setItem(KEY,JSON.stringify(S)); }catch(e){ storageOK=false; } }
+
+/* ---------- shared bits ---------- */
+function sideWord(c){ return (c>0&&c<6)?"R":(c>6)?"L":""; }
+function refSize(){ return S.refMode==="obj"?S.objIn:S.deerIn; }
+function refUnc(){ return S.refMode==="obj"?S.objUnc:S.deerUnc; }
+
+/* ---------- SHOT ---------- */
+function buildSeg(el,key,after){
+  el.innerHTML=C.order(S).map(k=>`<button data-l="${k}">${LOADS[k].short}<small>${LOADS[k].role}</small></button>`).join("");
+  el.querySelectorAll("button").forEach(b=>b.onclick=()=>{ S[key]=b.dataset.l; save(); render(); });
+}
+function setRange(v,typed){ const r=clamp(Math.round(+v||200),25,500); $("#rngNum").value=r; if(r===S.range) return; S.range=r; save(); typed?soon():render(); }
+
+function buildClock(){
+  const svg=$("#clock");
+  let h=`<circle cx="110" cy="110" r="100" style="fill:var(--panel);stroke:var(--line)"/>`;
+  h+=`<path d="M110 128 L110 82 M100 94 L110 82 L120 94" style="stroke:var(--dim)" stroke-width="3" fill="none"/><text x="110" y="146" style="fill:var(--dim)" font-size="10" text-anchor="middle" font-family="monospace">YOU</text>`;
+  h+=`<defs><marker id="ah" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 z" style="fill:var(--go)"/></marker></defs>`;
+  h+=`<line id="wArrow" stroke-width="4" style="stroke:var(--go)" marker-end="url(#ah)"/>`;
+  for(let c=1;c<=12;c++){ const a=c*Math.PI/6, x=110+Math.sin(a)*84, y=110-Math.cos(a)*84;
+    h+=`<g data-c="${c%12}" style="cursor:pointer"><circle cx="${x}" cy="${y}" r="17"/><text x="${x}" y="${y+5}" font-size="14" font-weight="700" text-anchor="middle" font-family="sans-serif" pointer-events="none">${c}</text></g>`; }
+  svg.innerHTML=h;
+  svg.querySelectorAll("g[data-c]").forEach(g=>g.onclick=()=>{ S.clock=+g.dataset.c; save(); render(); });
+}
+function drawClock(){
+  $$("#clock g[data-c]").forEach(g=>{ const on=+g.dataset.c===S.clock;
+    g.querySelector("circle").setAttribute("style",on?"fill:var(--blaze);stroke:var(--blaze)":"fill:var(--panel2);stroke:var(--line)");
+    g.querySelector("text").setAttribute("style",on?"fill:#1a0e05":"fill:var(--ink)"); });
+  const ar=$("#wArrow");
+  if(S.wind>0&&S.clock!==0&&S.clock!==6){ const a=S.clock*Math.PI/6;
+    ar.setAttribute("x1",110+Math.sin(a)*66); ar.setAttribute("y1",110-Math.cos(a)*66);
+    ar.setAttribute("x2",110+Math.sin(a)*30); ar.setAttribute("y2",110-Math.cos(a)*30); ar.style.display="";
+  } else ar.style.display="none";
+  const val=Math.abs(Math.sin(S.clock*Math.PI/6));
+  const vt=val>0.99?"full value":val>0.8?"about ⅞ value":val>0.4?"half value":"no crosswind (head or tail)";
+  const side=(S.clock>0&&S.clock<6)?"from your right, pushes the bullet LEFT":(S.clock>6)?"from your left, pushes the bullet RIGHT":"straight in or behind";
+  $("#clockTxt").textContent=`From ${S.clock===0?12:S.clock} o'clock: ${vt}, ${side}.`;
+}
+
+function renderShot(){
+  $$("#loadSeg button").forEach(b=>b.classList.toggle("on",b.dataset.l===S.load));
+  $$("#methodSeg button").forEach(b=>b.classList.toggle("on",b.dataset.v===S.method));
+  $("#rngNum").value=S.range; $("#rngSl").value=S.range;
+  $("#windSl").value=S.wind; $("#windVal").textContent=S.wind;
+  $("#tempSl").value=S.temp; $("#tempVal").textContent=S.temp;
+  setHTML($("#markChips"),S.marks.map((m,i)=>`<button class="chip" data-i="${i}">${esc(m.name)} <b>${m.yd}</b></button>`).join("")
+    || `<span class="small">Add landmarks on the Range tab and they show up here as one-tap ranges.</span>`);
+  drawClock();
+
+  const L=LOADS[S.load], sol=C.solve(S,S.load,S.temp,S.wind,S.clock,500), p=sol[S.range];
+  const clk=S.click, sc=C.retScale(S), mi=S.range*MI/100;
+  const eClicks=Math.round(p.el/clk), wClicks=Math.round(p.wd/clk), nd=C.noDialMax(S,sol);
+  const inND=S.range<=nd, closeHold=inND&&(S.range<150||eClicks===0);
+  const windMatters=Math.abs(p.z)>=1&&Math.abs(p.wd)>=0.125;
+  const locked=S.dialYd!==null;
+  const tE=locked?S.dialE:((S.method!=="hold"&&!closeHold)?eClicks:0);        // clicks on the elevation turret when you fire
+  const tW=locked?S.dialW:((S.method==="dial"&&windMatters)?wClicks:0);
+  const resE=p.el-tE*clk, resW=p.wd-tW*clk;                                     // MOA still to hold with the reticle
+  const resEin=resE*mi, resWin=resW*mi;
+  const dirE=n=>n>=0?"UP":"DOWN", dirW=n=>n>=0?"R":"L";
+
+  $("#loadCons").textContent=L.cons;
+
+  /* elevation */
+  let eLab,eBig,eDet;
+  if(locked){
+    if(Math.abs(resEin)<=1||Math.round(resE/clk)===0){ eLab="Elevation · turret already set"; eBig="SET";
+      eDet=`turret has ${dirE(S.dialE)} ${Math.abs(S.dialE)} on it<br><span class="d">hold center for elevation</span>`; }
+    else { const w=C.holdWords(S,resE).long, over=resE>0;
+      eLab=over?"Elevation · hold over":"Elevation · hold under"; eBig=`${q(Math.abs(resE)/sc)} ${over?"OVER":"UNDER"}`;
+      eDet=`vitals ${w} ${over?"below":"ABOVE"} center<br><span class="d">aim ${Math.abs(resEin).toFixed(1)}″ ${over?"high":"low"} at ${S.range} yd</span><br><span class="d">or re-dial ${dirE(eClicks-S.dialE)} ${Math.abs(eClicks-S.dialE)} → turret reads ${C.turretRead(S,eClicks)}</span>`; }
+  } else if(closeHold){
+    const hi=Math.abs(p.y); eLab="Elevation · don't dial"; eBig="HOLD ON";
+    eDet=(hi<1?"dead on, within 1″ of aim":`aim dead on, hits ${hi.toFixed(1)}″ ${p.y<0?"low":"high"}<br><span class="d">inside the ${S.vital}″ vitals</span>`)
+      +`<br><span class="d">${S.range<150?"close range: never dial":"no dial needed"}</span>`;
+  } else if(S.method==="hold"){
+    const w=C.holdWords(S,p.el).long;
+    if(inND){ eLab="Elevation · hold dead on"; eBig="HOLD ON";
+      eDet=`hits ${Math.abs(p.y).toFixed(1)}″ low, inside the ${S.vital}″ vitals<br><span class="d">finer: vitals ${w} below center</span>`; }
+    else { eLab="Elevation · hold, turret at 0"; eBig=`${q(Math.abs(p.el)/sc)} ${p.el>=0?"LOW":"HIGH"}`;
+      eDet=`vitals ${w} ${p.el>=0?"below":"above"} center<br><span class="d">bullet drops ${Math.abs(p.y).toFixed(1)}″</span><br><span class="d">or dial ${dirE(eClicks)} ${Math.abs(eClicks)} → turret reads ${C.turretRead(S,eClicks)}</span>`; }
+  } else {
+    eLab=inND?"Elevation · dial, or hold dead on":"Elevation · dial"; eBig=`${dirE(eClicks)} ${Math.abs(eClicks)}`;
+    eDet=`turret reads <b>${C.turretRead(S,eClicks)}</b> · bullet ${p.y<0?"drops":"is high"} ${Math.abs(p.y).toFixed(1)}″<br><span class="d">${inND?`no time? hold dead on, still inside the ${S.vital}″ vitals`:`no time? vitals ${C.holdWords(S,p.el).long} ${p.el>=0?"below":"above"} center`}</span>`;
+  }
+
+  /* wind */
+  let wLab,wBig,wDet;
+  const drift=`bullet drifts ${Math.abs(p.z).toFixed(1)}″ ${p.z<0?"left":"right"}`;
+  if(!locked&&tW!==0){
+    wLab="Wind · dial into it"; wBig=`${dirW(wClicks)} ${Math.abs(wClicks)}`;
+    wDet=`turret reads ${C.turretRead(S,wClicks)} ${dirW(wClicks)} · ${drift}<br><span class="d">then hold center</span><br><span class="d">no time? vitals ${C.holdWords(S,p.wd,"h").long} on the ${p.wd>0?"LEFT":"RIGHT"}</span>`;
+  } else if((locked&&tW!==0)?Math.abs(resWin)<1:!windMatters){
+    wLab=locked&&tW!==0?"Wind · turret already set":"Wind"; wBig="CENTER";
+    wDet=locked&&tW!==0?`turret has ${dirW(S.dialW)} ${Math.abs(S.dialW)} on it<br><span class="d">hold center for wind</span>`:`drift ${Math.abs(p.z).toFixed(1)}″ — ignore it`;
+  } else {
+    const mk=resW>0?"LEFT":"RIGHT", hs=resW>0?"right":"left";
+    wLab="Wind · vitals on this side of center"; wBig=`${q(Math.abs(resW)/sc)} ${mk}`;
+    wDet=`vitals ${C.holdWords(S,resW,"h").long}, ${mk.toLowerCase()} of center<br><span class="d">crosshair ends up ${hs}, into the wind · ${drift}</span>`
+      +(locked?"":`<br><span class="d">or dial ${Math.abs(wClicks)} click${Math.abs(wClicks)===1?"":"s"} ${dirW(wClicks)}</span>`);
+  }
+
+  /* notes */
+  let notes="";
+  if(locked) notes+=`<div class="note warn">Turret is locked in at ${dirE(S.dialE)} ${Math.abs(S.dialE)}${S.dialW?`, ${dirW(S.dialW)} ${Math.abs(S.dialW)} wind`:""} (set for ${S.dialYd} yd). The lines above are what to hold on top of that. Clear it in the second-deer box when the turrets go back to zero.</div>`;
+  else if(inND) notes+=`<div class="note">Inside the dead-on window, which runs to <b>${nd} yd</b> with this load at ${S.temp}°F. A center hold stays within ${S.vital/2}″ of aim the whole way.</div>`;
+  else notes+=`<div class="note">Past the dead-on window (${nd} yd). ${S.method==="hold"?"Hold it with the reticle":"Dial, shoot, then dial back to zero"}.</div>`;
+  if(p.v<L.minV) notes+=`<div class="note bad">Impact velocity ${Math.round(p.v)} fps is below the ~${L.minV} fps this bullet needs to expand (${L.minSrc}). Get closer or pass.</div>`;
+  if(!locked&&S.method==="hold"&&!inND&&Math.abs(p.el)/sc>(S.ret==="swbdc"?11.4:16)) notes+=`<div class="note warn">${S.ret==="swbdc"?"That hold is past the top of the bottom post. Dial this one or get closer.":"That hold is a long way down the reticle. Dial this one."}</div>`;
+  if(Math.abs(resW)/sc>8) notes+=`<div class="note warn">${q(Math.abs(resW)/sc)} MOA of wind is more hold than a deer at this range deserves. Get closer, wait for a lull, or pass.</div>`;
+  { const far=C.RIFLES[S.rifle].far; if(S.range>far) notes+=`<div class="note warn">Past ${far} yd with this rifle. This is a prediction until you've hit steel at this distance with this load.</div>`; }
+  if(C.isSfp(S)&&S.curPow!==S.calPow) notes+=`<div class="note warn">Second focal plane at ${S.curPow}× (true at ${S.calPow}×): every printed MOA is worth ${sc.toFixed(2)} right now. The holds above are already converted to what you see printed.</div>`;
+
+  $("#out").innerHTML=
+    `<div class="oline"><div><div class="olab">${eLab}</div><div class="oval">${eBig}</div></div><div class="odet">${eDet}</div></div>`+
+    `<div class="oline"><div><div class="olab">${wLab}</div><div class="oval w">${wBig}</div></div><div class="odet">${wDet}</div></div>`+
+    `<div class="stats"><div class="stat"><b>${Math.round(p.v)}</b><span>fps impact</span></div><div class="stat"><b>${Math.round(p.e)}</b><span>ft-lb</span></div>`+
+    `<div class="stat"><b>${p.t.toFixed(2)}</b><span>sec flight</span></div><div class="stat"><b>${Math.round(C.mvFor(S,S.load,S.temp))}</b><span>fps muzzle</span></div></div>${notes}`;
+
+  const canToggle=!locked&&(tE!==0||tW!==0);
+  $("#picSeg").hidden=!canToggle;
+  $$("#picSeg button").forEach(b=>b.classList.toggle("on",b.dataset.v===S.pic));
+  let pic={iE:p.el,iW:p.wd,tE:0,tW:0,mode:"hold"};
+  if(locked) pic={iE:resE,iW:resW,tE:tE,tW:tW,mode:"locked"};
+  else if(canToggle&&S.pic==="dial") pic={iE:resE,iW:resW,tE:tE,tW:tW,mode:"dial"};
+  pic.sc=sc; pic.inND=inND; pic.alt=(pic.mode==="hold"&&canToggle)?{tE:tE,tW:tW}:null;
+  drawReticle(pic);
+  renderSecond(sol,eClicks,wClicks,tE,tW,locked);
+  renderCompare();
+}
+
+/* reticle picture: the crosshair is fixed; the deer sits where the hold puts her.
+   Holding over = you raise the rifle, so she drops down the reticle until her vitals sit on the hold hash. */
+function drawReticle(o){
+  const sc=o.sc, st=S.hashMoa, iE=o.iE/sc, iW=o.iW/sc;          // printed-MOA units; +iE = vitals below center, +iW = vitals left
+  const bdc=S.ret==="swbdc", ext=Math.max(bdc?13:10,Math.ceil((Math.max(Math.abs(iE),Math.abs(iW))+4)/2)*2), px=140/ext;
+  const yd=S.range, mi=yd*MI/100, size=S.deerIn, u=size/mi/sc*px;
+  const vx=-iW*px, vy=iE*px, bx=vx-0.45*u, by=vy-0.62*u, OR="#f26419";
+  let h=`<defs><clipPath id="cp"><circle r="145"/></clipPath></defs><g clip-path="url(#cp)"><circle r="145" fill="#2b3320"/>`;
+  h+=`<rect x="-150" y="${vy+u*1.35}" width="300" height="320" fill="#232a18"/>`;
+  const body=`M${bx-0.1*u},${by+0.05*u} C${bx+0.4*u},${by-0.12*u} ${bx+1.6*u},${by-0.1*u} ${bx+2.2*u},${by+0.05*u} C${bx+2.45*u},${by+0.25*u} ${bx+2.4*u},${by+0.85*u} ${bx+2.1*u},${by+0.95*u} L${bx+0.2*u},${by+1.0*u} C${bx-0.05*u},${by+0.9*u} ${bx-0.2*u},${by+0.5*u} ${bx-0.1*u},${by+0.05*u}Z`;
+  const neck=`M${bx+0.05*u},${by+0.35*u} L${bx-0.35*u},${by-0.55*u} L${bx-0.05*u},${by-0.62*u} L${bx+0.45*u},${by+0.1*u}Z`;
+  const head=`M${bx-0.3*u},${by-0.5*u} L${bx-0.85*u},${by-0.35*u} L${bx-0.9*u},${by-0.5*u} L${bx-0.25*u},${by-0.78*u}Z`;
+  const ear=`M${bx-0.2*u},${by-0.72*u} L${bx-0.05*u},${by-1.0*u} L${bx-0.02*u},${by-0.7*u}Z`;
+  const legs=[0.15,0.35,1.85,2.05].map(k=>`M${bx+k*u},${by+0.9*u} L${bx+(k+0.08)*u},${by+0.9*u} L${bx+(k+0.06)*u},${by+2.0*u} L${bx+(k-0.01)*u},${by+2.0*u}Z`).join(" ");
+  h+=`<path d="${legs}" fill="#8a6a45"/><path d="${body} ${neck} ${head} ${ear}" fill="#9c7a52" stroke="#5b4430" stroke-width="0.6"/>`;
+  h+=`<circle cx="${vx}" cy="${vy}" r="${Math.max(3,S.vital/2/mi/sc*px)}" fill="none" stroke="#e0533d" stroke-width="1.4" stroke-dasharray="3 2"/>`;
+  /* reticle */
+  if(bdc){
+    h+=`<g stroke="#0c0c0c"><line x1="-150" y1="0" x2="150" y2="0" stroke-width="1.1"/><line x1="0" y1="-150" x2="0" y2="${11.4*px}" stroke-width="1.1"/>`;
+    [0.9,1.3,1.8].forEach((w,i)=>{ const d=BDCV[i]*px; h+=`<line x1="${-w*px}" y1="${d}" x2="${w*px}" y2="${d}" stroke-width="1.6"/>`; });
+    h+=`</g><rect x="${-0.4*px}" y="${11.4*px}" width="${0.8*px}" height="200" fill="#0c0c0c"/><g fill="#0c0c0c" font-size="8" font-family="monospace">`;
+    [0.9,1.3,1.8].forEach((w,i)=>{ h+=`<text x="${w*px+4}" y="${BDCV[i]*px+3}">${i+1}</text>`; });
+    h+=`</g>`;
+  } else {
+  h+=`<g stroke="#0c0c0c" stroke-width="1.1"><line x1="-150" y1="0" x2="150" y2="0"/><line x1="0" y1="-150" x2="0" y2="150"/>`;
+  const nH=Math.floor(ext/st), vEvery=2, hEvery=S.ret==="ebr"?4:2;
+  for(let i=1;i<=nH;i++){ const d=i*st*px, Lv=(i%vEvery===0)?6:3.5, Lh=(i%hEvery===0)?6:3.5;
+    h+=`<line x1="${-Lv}" y1="${d}" x2="${Lv}" y2="${d}"/><line x1="${-Lv}" y1="${-d}" x2="${Lv}" y2="${-d}"/><line x1="${d}" y1="${-Lh}" x2="${d}" y2="${Lh}"/><line x1="${-d}" y1="${-Lh}" x2="${-d}" y2="${Lh}"/>`; }
+  h+=`</g><g fill="#0c0c0c" font-size="8" font-family="monospace" text-anchor="middle">`;
+  for(let i=1;i<=nH;i++){ const d=i*st*px, v=num(i*st);
+    if(i%vEvery===0&&d<138){ h+=`<text x="13" y="${d+3}">${v}</text>`; if(d<120) h+=`<text x="13" y="${-d+3}">${v}</text>`; }
+    if(i%hEvery===0&&d<132) h+=`<text x="${d}" y="-9">${v}</text><text x="${-d}" y="-9">${v}</text>`; }
+  h+=`</g>`;
+  }
+  /* where the hold lands on the reticle: orange tick + value on each stadia, dashed lead from the vitals */
+  const tag=(x,y,txt,anchor)=>{ const w=txt.length*5.6+6, rx=anchor==="end"?x-w:anchor==="middle"?x-w/2:x;
+    return `<rect x="${rx}" y="${y-8}" width="${w}" height="11" rx="2" fill="rgba(0,0,0,.6)"/><text x="${anchor==="end"?x-3:anchor==="middle"?x:x+3}" y="${y+1}" text-anchor="${anchor}" fill="${OR}" font-size="9" font-weight="700" font-family="monospace">${txt}</text>`; };
+  if(Math.abs(iE)>=0.25){ h+=`<line x1="${vx}" y1="${vy}" x2="0" y2="${vy}" stroke="${OR}" stroke-width="1" stroke-dasharray="2 2"/><line x1="-9" y1="${vy}" x2="9" y2="${vy}" stroke="${OR}" stroke-width="2.4"/>`+(vx<0?tag(bdc?1.8*px+18:22,vy+1,q(Math.abs(iE))+(iE>0?"↓":"↑"),"start"):tag(-12,vy+1,q(Math.abs(iE))+(iE>0?"↓":"↑"),"end")); }   // label on the side away from the deer
+  if(Math.abs(iW)>=0.25){ h+=`<line x1="${vx}" y1="${vy}" x2="${vx}" y2="0" stroke="${OR}" stroke-width="1" stroke-dasharray="2 2"/><line x1="${vx}" y1="-9" x2="${vx}" y2="9" stroke="${OR}" stroke-width="2.4"/>`+tag(vx,-14,q(Math.abs(iW))+(iW>0?"L":"R"),"middle"); }
+  if(Math.abs(vx)>0.5||Math.abs(vy)>0.5) h+=`<circle cx="${vx}" cy="${vy}" r="4" fill="none" stroke="${OR}" stroke-width="2"/>`;
+  h+=`</g><circle r="145" fill="none" stroke="#0c0c0c" stroke-width="6"/>`;
+  $("#ret").innerHTML=h;
+  /* caption */
+  const ud=n=>(n>=0?"UP ":"DOWN ")+Math.abs(n), lr=n=>(n>=0?"R ":"L ")+Math.abs(n);
+  const eT=Math.abs(iE)<0.25?"":`Elevation: vitals ${C.holdWords(S,o.iE).long} ${iE>0?"below":"above"} center.`;
+  const wT=Math.abs(iW)<0.25?"":`Wind: vitals ${C.holdWords(S,o.iW,"h").long} ${iW>0?"left":"right"} of center.`;
+  let cap;
+  if(o.mode==="hold"){
+    cap="Turrets at zero. "+((eT||wT)?(eT?"You raise the rifle, so she drops down the reticle. ":"")+[eT,wT].filter(Boolean).join(" "):"Crosshair on her vitals.");
+    if(o.inND&&Math.abs(o.iE*mi)>1) cap+=" Inside the dead-on window, so a center hold also works.";
+    if(o.alt) cap+=` Or dial ${[o.alt.tE?ud(o.alt.tE):"",o.alt.tW?lr(o.alt.tW):""].filter(Boolean).join(", ")} and the crosshair goes on her.`;
+  } else {
+    cap=(o.mode==="locked"?`Turret locked at ${ud(o.tE)}${o.tW?", "+lr(o.tW):""} (set for ${S.dialYd} yd). `:`Turret: ${o.tE?ud(o.tE):"elevation 0"}${o.tW?", "+lr(o.tW):""}. `)
+      +((eT||wT)?[eT,wT].filter(Boolean).join(" "):"Crosshair on her vitals.");
+  }
+  $("#retTxt").textContent=cap+` ${C.retDesc(S).replace(/^./,c=>c.toUpperCase())}; a ${size}″ chest spans ${(size/mi/sc).toFixed(1)} MOA at ${yd} yd. Sketch, not your exact field of view.`;
+}
+
+/* second deer: what the turret already has on it */
+let pendingDial={yd:200,tE:0,tW:0};      // exactly what the lock button says right now
+function renderSecond(sol,eClicks,wClicks,tE,tW,locked){
+  const el=$("#second"), clk=S.click;
+  if(!el._built){ el.innerHTML=`<div id="secU"><p class="p">Dial for the first deer, shoot, and a second one is standing there. Re-dialing costs the seconds you don't have. Lock in what's on the turret and this box tells you what to hold for a deer at any other range.</p><button class="btn blaze full" id="lockBtn"></button></div><div id="secL"></div>`;
+    el._built=1;
+    el.onclick=e=>{ if(e.target.closest("#lockBtn")&&!$("#lockBtn").disabled){ S.dialYd=pendingDial.yd; S.dialE=pendingDial.tE; S.dialW=pendingDial.tW; save(); render(); }
+      else if(e.target.closest("#unlockBtn")){ S.dialYd=null; S.dialE=0; S.dialW=0; save(); render(); } }; }
+  $("#secU").hidden=locked; $("#secL").hidden=!locked;
+  if(!locked){
+    const can=tE!==0||tW!==0, b=$("#lockBtn"); pendingDial={yd:S.range,tE:tE,tW:tW};
+    b.disabled=!can;
+    b.textContent=can?`I dialed ${tE?(tE>0?"UP ":"DOWN ")+Math.abs(tE):""}${tE&&tW?" and ":""}${tW?(tW>0?"R ":"L ")+Math.abs(tW):""} for ${S.range} yd — lock it in`:"Nothing to dial at this range";
+    return;
+  }
+  const lim=S.vital/2, res=yd=>(sol[yd].el-S.dialE*clk)*yd*MI/100;             // inches still needed (+ = bullet would land low)
+  let a=S.dialYd, b=S.dialYd; while(a>25&&Math.abs(res(a-1))<=lim) a--; while(b<500&&Math.abs(res(b+1))<=lim) b++;
+  const offs=[-100,-50,0,50,100].map(o=>S.dialYd+o).filter(y=>y>=50&&y<=500);
+  let strip=offs.map(y=>{ const r=sol[y].el-S.dialE*clk, inch=res(y), on=Math.abs(inch)<=1;
+    return `<div class="${y===S.dialYd?"at":""}">${y} yd<b>${on?"dead on":(r>0?"over ":"under ")+q(Math.abs(r)/C.retScale(S))}</b>${on?"":"aim "+Math.abs(inch).toFixed(1)+"″ "+(r>0?"high":"low")}</div>`; }).join("");
+  setHTML($("#secL"),`<div class="lockbar">On the turret: ${S.dialE>=0?"UP":"DOWN"} ${Math.abs(S.dialE)} (reads ${C.turretRead(S,S.dialE)})${S.dialW?` · wind ${S.dialW>0?"R":"L"} ${Math.abs(S.dialW)}`:""} · set for ${S.dialYd} yd</div>`
+    +`<p class="p">With that dial, a <b>center hold is good from ${a} to ${b} yd</b> (inside the ${S.vital}″ vitals). Outside that band, hold what the Shot readout says: “over” puts the vitals below center, “under” puts them above.</p>`
+    +`<div class="strip" style="grid-template-columns:repeat(${offs.length},1fr)">${strip}</div>`
+    +`<button class="btn full" id="unlockBtn">Turrets are back at zero — clear it</button>`);
+}
+
+function renderCompare(){
+  const sc=C.retScale(S), tb=$("#cmpTbl"), ord=C.order(S);
+  if(tb._k!==ord.join()){ tb._k=ord.join();
+    tb.innerHTML=`<tr><th style="text-align:left">Load</th><th>Dial</th><th>Wind</th><th>Hold</th><th>fps</th></tr>`+ord.map(k=>`<tr data-k="${k}"><td class="k">${LOADS[k].short}</td><td class="c"></td><td class="r"></td><td></td><td></td></tr>`).join("");
+    tb.onclick=e=>{ const r=e.target.closest("tr[data-k]"); if(r){ S.load=r.dataset.k; save(); render(); } }; }
+  for(const k of ord){
+    const p=C.solve(S,k,S.temp,S.wind,S.clock,S.range)[S.range], e=Math.round(p.el/S.click), w=Math.round(p.wd/S.click);
+    const close=S.range<150&&Math.abs(p.y)<=S.vital/2, wOk=Math.abs(p.z)>=1&&Math.abs(p.wd)>=0.125;
+    const tr=tb.querySelector(`tr[data-k="${k}"]`), td=tr.children; tr.className=k===S.load?"sel":"";
+    td[1].textContent=close?"hold on":e===0?"0":(e>0?"UP ":"DN ")+Math.abs(e);
+    td[2].textContent=(!wOk||w===0)?"0":Math.abs(w)+" "+(w>0?"R":"L");
+    td[3].textContent=(close?"ctr":C.holdWords(S,p.el).short)+(wOk?" · "+q(Math.abs(p.wd)/sc)+(p.wd>0?"L":"R"):"");
+    td[4].textContent=Math.round(p.v); td[4].style.color=LOADS[k].minV&&p.v<LOADS[k].minV?"var(--bad)":"";
+  }
+}
+
+/* ---------- RANGE ---------- */
+function renderRange(){
+  const sc=C.retScale(S), st=S.hashMoa, size=refSize(), unc=refUnc(), obj=S.refMode==="obj";
+  $$("#refSeg button").forEach(b=>b.classList.toggle("on",obj?b.dataset.v==="obj":(b.dataset.v!=="obj"&&+b.dataset.v===S.deerIn)));
+  if(document.activeElement!==$("#refSize")) $("#refSize").value=size;
+  if(document.activeElement!==$("#refUnc")) $("#refUnc").value=unc;
+  if(document.activeElement!==$("#readMoa")&&readOK) $("#readMoa").value=S.read;
+  $("#refHint").innerHTML=obj
+    ? "Use something you've measured: a chicken tractor's height or length, a gate, a fence panel. A known size takes the deer-size guess out of it. Square-on only; an angled object looks shorter and reads far."
+    : "<b>Chest depth:</b> top of the back straight down to the bottom of the brisket, just behind the front leg. Leave the legs, neck and head out of it. It's the one dimension that doesn't change much with how she's standing. 15″ is a working guess for an Ozark doe, not a measured average.";
+  $("#readLab").textContent=(obj?"The object":"Her chest")+" spans this many MOA"+(C.isSfp(S)?` (as printed, at ${S.curPow}×)`:"");
+  $("#readGaps").textContent=`MOA = ${C.spanText(S,S.read*sc)}`;
+  $("#rangeNote").innerHTML=`Yards = inches × 95.5 ÷ MOA. The bracket combines the size error above with a ±${num(S.readUnc)} MOA reading error. Your ${C.retDesc(S)}, so half a MOA is about as fine as you can read.`+(C.isSfp(S)?` Second focal plane: range at ${S.calPow}×, where the marks are true.`:"");
+
+  const sol=C.solve(S,S.load,S.temp,0,3,500), nd=C.noDialMax(S,sol), L=LOADS[S.load];
+  const ndMoa=S.deerIn*95.493/nd/sc;
+  $("#ndRule").innerHTML=nd<25?`With these settings a center hold never stays inside the ${S.vital}″ vitals. Check scope height and vital size under Setup.`:`With ${esc(L.short)} your dead-on window runs to <b>${nd} yd</b>. A ${S.deerIn}″ chest at ${nd} yd spans ${ndMoa.toFixed(1)} MOA, which is <b>${C.spanText(S,ndMoa*sc)}</b>. `
+    +`If her chest fills that much of the reticle or more, she's inside the window: crosshair on the crease and shoot. You only need a real range when she looks smaller than that.`;
+
+  if(!readOK){ $("#estRng").textContent="—"; $("#estDet").innerHTML=`<span class="d">enter 1 to 60 MOA</span>`;
+    $("#estVerdict").className="note"; $("#estVerdict").textContent="Type how many MOA her chest covers, or use the − / + buttons.";
+    $("#useRng").disabled=true; $("#useRng").textContent="Enter the MOA first"; return; }
+  const t=S.read*sc, yd=size*95.493/t;
+  const lo=Math.max(0,(size-unc))*95.493/((S.read+S.readUnc)*sc), hi=S.read>S.readUnc?(size+unc)*95.493/((S.read-S.readUnc)*sc):Infinity;
+  $("#estRng").textContent=(Math.round(yd/5)*5)+" yd";
+  $("#estDet").innerHTML=`<span class="d">honest bracket</span><br>${Math.round(lo)}–${Number.isFinite(hi)?Math.round(hi):"?"} yd`;
+  let v, cls="note";
+  const yAt=y=>sol[clamp(Math.round(y),25,500)].y;
+  if(hi<=nd) v=`The whole bracket is inside your dead-on window (${nd} yd). Hold on the crease and shoot.`;
+  else if(lo>400){ v=`Even the near end of the bracket is past 400. Pass, or close the distance.`; cls="note bad"; }
+  else { const spread=Math.abs(yAt(Math.min(hi,500))-yAt(lo));
+    v=`Past the dead-on window, and the bracket is ${Math.round(Math.min(hi,999)-lo)} yd wide. Between its two ends the bullet's drop differs by about <b>${spread.toFixed(0)}″</b>`
+      +(spread>S.vital/2?` — more than half the ${S.vital}″ vital zone. Laser her or use a landmark before you dial on this number.`:`, which the vital zone can absorb. Usable.`);
+    if(spread>S.vital/2) cls="note warn"; }
+  $("#estVerdict").className=cls; $("#estVerdict").innerHTML=v;
+  const ok=yd>=25&&yd<=500; $("#useRng").disabled=!ok;
+  $("#useRng").textContent=ok?`Use ${Math.round(yd/5)*5} yd → Shot`:(yd>500?"Past 500 yd — no shot":"Under 25 yd — just shoot");
+
+  const bd=S.ret==="swbdc";
+  let tb=`<tr><th>Range</th><th>${size}″ spans (MOA)</th><th>${bd?"Center to":"Hash gaps"}</th></tr>`;
+  for(let y=100;y<=500;y+=50){ const m=size/(y*MI/100)/sc; tb+=`<tr${y===S.range?' class="hl"':''}><td class="r">${y}</td><td>${m.toFixed(1)}</td><td class="c">${bd?(m>11.7?"past the post":C.holdWords(S,m*sc).short.replace(/^on /,"")):(m/st).toFixed(1)}</td></tr>`; }
+  $("#rngTbl").innerHTML=tb;
+
+  const ml=$("#markList");
+  if(document.activeElement===null||!ml.contains(document.activeElement)) setHTML(ml,S.marks.map((m,i)=>`<div class="mark"><input class="inp" value="${esc(m.name)}" data-mi="${i}" data-f="name" maxlength="40"><input class="inp n" type="number" inputmode="numeric" value="${m.yd}" data-mi="${i}" data-f="yd"><button class="btn" data-del="${i}" aria-label="Remove">✕</button></div>`).join(""));
+  if(!ml._w){ ml._w=1;
+    ml.addEventListener("change",e=>{ const inp=e.target; if(!inp.dataset||inp.dataset.mi===undefined) return; const m=S.marks[+inp.dataset.mi]; if(!m) return;
+      if(inp.dataset.f==="yd") m.yd=clamp(Math.round(+inp.value||0),25,500); else m.name=inp.value||"landmark"; save(); });
+    ml.addEventListener("click",e=>{ const b=e.target.closest("[data-del]"); if(!b) return; S.marks.splice(+b.dataset.del,1); save(); ml._h=null; render(); }); }
+}
+
+/* ---------- SUN ---------- */
+function renderSun(){
+  $$("#placeSeg button").forEach(b=>b.classList.toggle("on",b.dataset.v===S.place));
+  $("#customBox").style.display=S.place==="custom"?"grid":"none";
+  if(document.activeElement!==$("#cLat")) $("#cLat").value=S.cLat;
+  if(document.activeElement!==$("#cLon")) $("#cLon").value=S.cLon;
+  renderSunNow();
+  const start=C.todayCT();
+  $("#sunTbl").innerHTML=C.sunTableHTML(S,start);
+  const pl=C.placeOn(S,start.key);
+  $("#sunTag").textContent=S.place==="plan"?"Through your last booked hunt · place follows your schedule":`Next 10 days · ${pl.name} · ${pl.sub}`;
+}
+function renderSunNow(){
+  const now=Date.now(), t=C.todayCT(now), pl=C.placeOn(S,t.key), s=C.sunDay(t,pl.lat,pl.lon,pl.st);
+  if(!s){ $("#sunNow").innerHTML=`<div class="olab">No sunrise or sunset at those coordinates today.</div>`; return; }
+  const tm=C.addDays(t,1), pl2=C.placeOn(S,tm.key), s2=C.sunDay(tm,pl2.lat,pl2.lon,pl2.st);
+  const dur=ms=>{ const m=Math.max(0,Math.round(ms/60000)), h=Math.floor(m/60); return (h?h+" h ":"")+(m%60)+" min"; };
+  let st, cls="note";
+  if(now<s.open){ st=`Opens in <b>${dur(s.open-now)}</b>. Sunrise ${C.fmtTime(s.rise,1)}.`; cls="note warn"; }
+  else if(now<=s.close){ st=`<b>Legal now.</b> ${dur(s.close-now)} of shooting light left.`; }
+  else { st=`Closed for today. Opens tomorrow at <b>${s2?C.fmtTime(s2.open,1):"—"}</b>${pl2.id!==pl.id?" at "+esc(pl2.name):""}.`; cls="note warn"; }
+  $("#sunNow").innerHTML=`<div class="olab">Today · ${C.dayLabel(t)} · ${esc(pl.name)} · ${esc(pl.hunt?pl.what:pl.sub)}</div>`
+    +`<div class="sunpair"><div><div class="olab">Legal open</div><div class="oval">${C.fmtTime(s.open,1)}</div><div class="odet l"><span class="d">sunrise</span> ${C.fmtTime(s.rise,1)}</div></div>`
+    +`<div><div class="olab">Legal close</div><div class="oval">${C.fmtTime(s.close,1)}</div><div class="odet l"><span class="d">sunset</span> ${C.fmtTime(s.set,1)}</div></div></div>`
+    +`<div class="${cls}">${st}</div>`;
+}
+
+/* ---------- CARD ---------- */
+function renderCard(){
+  $$("#cardLoadSeg button").forEach(b=>b.classList.toggle("on",b.dataset.l===S.cardLoad));
+  $("#cardTempSl").value=S.cardTemp; $("#cardTempVal").textContent=S.cardTemp;
+  const id=S.cardLoad, rows=C.dopeRows(S,id,S.cardTemp);
+  $("#cardTitle").textContent=C.condLine(S,id,S.cardTemp);
+  let t=`<tr><th>Yd</th><th>Drop″</th><th>CLICKS</th><th>Turret</th><th>Hold</th>${C.CARD_WINDS.map(w=>`<th>${w} mph</th>`).join("")}${S.spin?"<th>Spin</th>":""}<th>fps</th></tr>`;
+  for(const r of rows) t+=`<tr${r.yd%100===0?' class="hl"':''}><td class="r">${r.yd}</td><td>${r.drop.toFixed(1)}</td><td class="c">${r.clicks}</td><td>${r.turret}</td><td>${r.hold}</td>`
+    +r.wind.map(w=>`<td>${w.toFixed(1)}</td>`).join("")+(S.spin?`<td>${Math.abs(r.spin).toFixed(1)}${r.spin>=0?"L":"R"}</td>`:"")+`<td>${Math.round(r.v)}${r.below?" †":""}</td></tr>`;
+  $("#dopeTbl").innerHTML=t;
+  $("#cardNote").innerHTML=`<b>CLICKS</b> are UP from your ${S.zero}-yd zero; <b>Turret</b> is the number the elevation turret should read. <b>Hold</b> is where the vitals go below center if you don't dial: ${S.ret==="swbdc"?"H1, H2, H3 are the 1st, 2nd and 3rd hash (2, 4.6, 7.8 MOA) and “post” is the top of the bottom post (11.4), true at "+S.calPow+"×; “H2+” is just past H2, “H3−” is just short of H3":"hashes are "+num(S.hashMoa)+" MOA apart, “2+” is just past the 2, “4−” is just short of the 4"}, “mid” is halfway. `
+    +`<b>Wind columns</b> are MOA to hold into a full-value wind (3 or 9 o'clock); use about ⅞ for 2, 4, 8, 10 and half for 1, 5, 7, 11. To dial wind instead, clicks = MOA × ${num(1/S.click)}, turned toward the wind. `
+    +(S.spin?`<b>Spin</b> is the bullet's own drift; “L” means hold that much left. Add it to a wind from your left, take it off a wind from your right. `:"")
+    +(rows.some(r=>r.below)?`† below the ~${LOADS[id].minV} fps this bullet needs to expand.`:"");
+  const temps=[0,20,40,60,80,95], rngs=C.RIFLES[S.rifle].tempR;
+  { const [a,b]=C.RIFLES[S.rifle].tempAt, s0=C.solve(S,S.cardLoad,0,0,3,b), s7=C.solve(S,S.cardLoad,70,0,3,b), d=y=>Math.round(s0[y].el/S.click)-Math.round(s7[y].el/S.click);
+    $("#tempNote").textContent=`Cold air is denser and cold powder burns slower; both drop the bullet more. With ${LOADS[S.cardLoad].short}, going from 70°F down to 0°F costs ${d(a)} click${d(a)===1?"":"s"} at ${a} and ${d(b)} at ${b}.`; }
+  let tt=`<tr><th>Load</th><th>°F</th>${rngs.map(r=>`<th>${r}</th>`).join("")}</tr>`;
+  for(const k of C.order(S)) temps.forEach((T,i)=>{ const s=C.solve(S,k,T,0,3,500);
+    tt+=`<tr>${i===0?`<td rowspan="${temps.length}" class="r" style="white-space:normal">${LOADS[k].short}</td>`:""}<td>${T}</td>${rngs.map(r=>`<td>${Math.round(s[r].el/S.click)}</td>`).join("")}</tr>`; });
+  $("#tempTbl").innerHTML=tt;
+}
+function download(name,content,type){ const url=URL.createObjectURL(new Blob([content],{type})), a=document.createElement("a");
+  a.href=url; a.download=name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(url),1500); }
+function exportCsv(){
+  const id=S.cardLoad, rows=C.dopeRows(S,id,S.cardTemp), Q=s=>'"'+String(s).replace(/"/g,'""')+'"';
+  const lines=[[C.condLine(S,id,S.cardTemp)],["Modeled data. Confirm on target."],
+    ["Yards","Drop in","Elevation MOA","Clicks up","Turret reads","Hold",...C.CARD_WINDS.map(w=>w+" mph wind MOA"),"Spin MOA (hold left)","fps","ft-lb"]];
+  for(const r of rows) lines.push([r.yd,r.drop.toFixed(2),r.moa.toFixed(2),r.clicks,r.turret,r.hold,...r.wind.map(w=>w.toFixed(2)),r.spin.toFixed(2),Math.round(r.v),Math.round(r.e)]);
+  download((S.rifle==="l350"?"350_Legend":"RPR_308")+"_dope_"+id+"_"+S.cardTemp+"F.csv",lines.map(r=>r.map(Q).join(",")).join("\r\n"),"text/csv;charset=utf-8");
+}
+
+/* ---------- SETUP ---------- */
+function buildLoadSetup(){
+  $("#loadSetup").innerHTML=C.order(S).map(k=>{ const L=LOADS[k]; return `
+    <div style="border-top:1px solid var(--line);padding-top:8px;margin-top:8px">
+      <div style="font-weight:600">${L.name}</div><div class="small">${L.sku} · book ${L.mv} fps from a ${L.tb||S.testBbl}″ test barrel · G1 ${L.bc} · ${L.minV?`opens at about ${L.minV} fps (${L.minSrc})`:"no published expansion floor"}</div>
+      <div class="grid2" style="grid-template-columns:1fr 1fr 1fr">
+        <div><label class="l">Chrono MV</label><input class="inp" type="number" data-lo="${k}" data-f="mv"></div>
+        <div><label class="l">100-yd high″</label><input class="inp" type="number" step="0.25" data-lo="${k}" data-f="up"></div>
+        <div><label class="l">100-yd right″</label><input class="inp" type="number" step="0.25" data-lo="${k}" data-f="rt"></div>
+      </div>
+    </div>`; }).join("");
+  $$("[data-lo]").forEach(i=>i.onchange=()=>{ const o=S.lo[i.dataset.lo], f=i.dataset.f;
+    o[f]= f==="mv" ? i.value : (+i.value||0); save(); soon(); });
+}
+function renderSetup(){
+  $$("[data-s]").forEach(i=>{ if(document.activeElement!==i) i.value=S[i.dataset.s]; });
+  $$("#spinSeg button").forEach(b=>b.classList.toggle("on",+b.dataset.v===+S.spin));
+  $$("#retSeg button").forEach(b=>b.classList.toggle("on",b.dataset.v===S.ret));
+  $("#sfpBox").style.display=C.isSfp(S)?"grid":"none";
+  $('[data-s="hashMoa"]').disabled=S.ret==="ebr"||S.ret==="swbdc";
+  $$("[data-lo]").forEach(i=>{ if(document.activeElement===i) return; const v=S.lo[i.dataset.lo][i.dataset.f];
+    i.value=v; });
+  $$('[data-lo][data-f="mv"]').forEach(i=>i.placeholder=Math.round(C.bookMv(S,i.dataset.lo)));
+}
+
+/* ---------- tabs + wiring ---------- */
+let TAB="shot";
+function showTab(t){ TAB=t; $$("nav button").forEach(b=>b.classList.toggle("on",b.dataset.t===t));
+  $$("section.tab").forEach(s=>s.classList.toggle("on",s.id==="tab-"+t)); render(); window.scrollTo(0,0); }
+function rebuildRifle(){ buildSeg($("#loadSeg"),"load"); buildSeg($("#cardLoadSeg"),"cardLoad"); buildLoadSetup(); }
+/* A typed value commits on blur, which on a phone happens inside the very tap on the next button.
+   Re-rendering right then can move or replace that button and swallow the tap, so typed values
+   re-render a moment later; any tap in between renders with the new value anyway. */
+let rT=0; function soon(){ clearTimeout(rT); rT=setTimeout(render,250); }
+function render(){
+  clearTimeout(rT);
+  const R=C.RIFLES[S.rifle], n=C.order(S).length;
+  $("#kick").innerHTML=C.kick(S); $("#hTitle").innerHTML=R.h1; document.title=R.name+" Field Dope";
+  $$("#rifleSeg button").forEach(b=>b.classList.toggle("on",b.dataset.r===S.rifle));
+  $("#cmpCard").hidden=n<2; $("#cmpTag").textContent=`All ${n} loads · same shot`;
+  $("#spinLab").textContent=`Spin drift (${R.twist} right-hand twist)`; $("#retNote").innerHTML=R.retNote;
+  document.body.classList.toggle("sun",!!S.sun); $("#sunBtn").setAttribute("aria-pressed",S.sun?"true":"false"); $("#sunBtn").textContent=S.sun?"◐ DARK":"☀ SUN";
+  if(TAB==="shot") renderShot(); else if(TAB==="range") renderRange(); else if(TAB==="sun") renderSun(); else if(TAB==="card") renderCard(); else renderSetup();
+}
+
+$("#rifleSeg").innerHTML=Object.keys(C.RIFLES).map(r=>`<button data-r="${r}">${C.RIFLES[r].name}<small>${C.RIFLES[r].sub}</small></button>`).join("");
+$$("#rifleSeg button").forEach(b=>b.onclick=()=>{ if(b.dataset.r===S.rifle) return; C.switchRifle(S,b.dataset.r); save(); rebuildRifle(); render(); });
+rebuildRifle(); buildClock();
+$("#placeSeg").innerHTML=Object.keys(C.PLACES).map(k=>`<button data-v="${k}">${C.PLACES[k].name}<small>${C.PLACES[k].sub}</small></button>`).join("");
+$$("#placeSeg button").forEach(b=>b.onclick=()=>{ S.place=b.dataset.v; save(); render(); });
+$("#cLat").onchange=e=>{ const v=+e.target.value; if(Number.isFinite(v)) S.cLat=v; save(); soon(); };
+$("#cLon").onchange=e=>{ let v=+e.target.value; if(Number.isFinite(v)){ if(v>0) v=-v; S.cLon=v; } save(); soon(); };   // US hunter: a positive longitude means west
+setInterval(()=>{ if(TAB==="sun"&&!document.hidden) renderSunNow(); },30000);
+document.addEventListener("visibilitychange",()=>{ if(!document.hidden) render(); });
+$$("nav button").forEach(b=>b.onclick=()=>showTab(b.dataset.t));
+$("#sunBtn").onclick=()=>{ S.sun=S.sun?0:1; save(); render(); };
+$("#rngNum").onchange=e=>setRange(e.target.value,1);
+$("#markChips").onclick=e=>{ const c=e.target.closest(".chip"); if(c&&S.marks[+c.dataset.i]) setRange(S.marks[+c.dataset.i].yd); };
+$("#rngSl").oninput=e=>setRange(e.target.value);
+$$("#tab-shot .nudge .btn").forEach(b=>b.onclick=()=>setRange(S.range+ +b.dataset.n));
+$("#windSl").oninput=e=>{ S.wind=+e.target.value; save(); render(); };
+$("#tempSl").oninput=e=>{ S.temp=+e.target.value; save(); render(); };
+$$("#methodSeg button").forEach(b=>b.onclick=()=>{ S.method=b.dataset.v; save(); render(); });
+$$("#picSeg button").forEach(b=>b.onclick=()=>{ S.pic=b.dataset.v; save(); render(); });
+$$("#refSeg button").forEach(b=>b.onclick=()=>{ if(b.dataset.v==="obj") S.refMode="obj"; else { S.refMode="deer"; S.deerIn=+b.dataset.v; } save(); render(); });
+$("#refSize").onchange=e=>{ const v=+e.target.value; if(Number.isFinite(v)&&v>0){ if(S.refMode==="obj") S.objIn=v; else S.deerIn=v; } save(); soon(); };
+$("#refUnc").onchange=e=>{ const v=+e.target.value; if(Number.isFinite(v)&&v>=0){ if(S.refMode==="obj") S.objUnc=v; else S.deerUnc=v; } save(); soon(); };
+$("#readMoa").oninput=e=>{ const raw=e.target.value, v=+raw; readOK=raw!==""&&Number.isFinite(v)&&v>=1&&v<=60; if(readOK){ S.read=v; save(); } renderRange(); };
+$("#readMoa").onblur=e=>{ if(readOK) e.target.value=S.read; };
+$$("#tab-range .nudge .btn").forEach(b=>b.onclick=()=>{ readOK=true; S.read=clamp(Math.round((S.read+ +b.dataset.m)*2)/2,1,60); save(); render(); });
+$("#useRng").onclick=()=>{ if(!readOK) return; const yd=refSize()*95.493/(S.read*C.retScale(S)); if(yd<25||yd>500) return; S.range=clamp(Math.round(yd/5)*5,25,500); save(); showTab("shot"); };
+$("#mkAdd").onclick=()=>{ const n=$("#mkName").value.trim(), y=+$("#mkYd").value; if(!n||!y) return;
+  S.marks.push({name:n,yd:clamp(Math.round(y),25,500)}); S.marks.sort((a,b)=>a.yd-b.yd); $("#mkName").value=""; $("#mkYd").value=""; save(); render(); };
+$("#cardTempSl").oninput=e=>{ S.cardTemp=+e.target.value; save(); renderCard(); };
+$("#printBtn").onclick=()=>window.print();
+$("#csvBtn").onclick=exportCsv;
+$$("[data-s]").forEach(i=>i.onchange=()=>{ if(i.value!==""&&Number.isFinite(+i.value)) S[i.dataset.s]=C.fix(i.dataset.s,i.value); save(); i.value=S[i.dataset.s]; soon(); });
+$$("#spinSeg button").forEach(b=>b.onclick=()=>{ S.spin=+b.dataset.v; save(); render(); });
+$$("#retSeg button").forEach(b=>b.onclick=()=>{ S.ret=b.dataset.v; if(S.ret==="ebr") S.hashMoa=2; save(); render(); });
+$("#resetBtn").onclick=()=>{ if(!confirm("Reset every setting to the defaults? Landmarks are kept.")) return;
+  const marks=S.marks, rid=S.rifle; S=C.clone(C.DEFAULTS); S.marks=marks; C.switchRifle(S,rid); save(); rebuildRifle(); render(); };
+$("#saveHtml").onclick=()=>{ save();
+  const c=document.documentElement.cloneNode(true);
+  c.querySelectorAll("link[rel=manifest],link[rel='apple-touch-icon'],link[rel=icon],meta[name='apple-mobile-web-app-capable'],meta[name='apple-mobile-web-app-status-bar-style'],meta[name='apple-mobile-web-app-title'],meta[name='mobile-web-app-capable'],script#pwaBoot").forEach(n=>n.remove());
+  c.querySelector("#savedConfig").textContent=JSON.stringify(S).replace(/</g,"\\u003c");
+  c.querySelector("#fallbackTables").innerHTML=C.fallbackHTML(S);
+  c.querySelector("#app").setAttribute("hidden",""); c.querySelector("#fallback").removeAttribute("hidden");
+  download("RPR-308-Field-Dope-v3.html","<!doctype html>\n"+c.outerHTML,"text/html;charset=utf-8"); };
+window.addEventListener("beforeprint",()=>renderCard());
+
+save(); showTab("shot"); renderCard();     // always open on Shot (a saved copy may carry another tab's markup); card pre-built so Print works from any tab
+$("#fallback").setAttribute("hidden",""); $("#app").removeAttribute("hidden");
+})();
+</script>
+<script id="pwaBoot">
+(function(){
+  "use strict";
+  var standalone = (window.matchMedia && window.matchMedia("(display-mode: standalone)").matches) || window.navigator.standalone === true;
+  if(standalone){
+    var btn=document.getElementById("saveHtml");
+    if(btn){
+      btn.hidden=true;
+      var note=document.createElement("p");
+      note.className="small";
+      note.id="saveHtmlNote";
+      note.style.marginTop="0";
+      note.textContent="Settings stay in this Home Screen app. The download button is hidden here because iPhone Home Screen apps cannot save a file that way. Open this page in Safari if you need a copy with settings baked in.";
+      btn.after(note);
+    }
+  }
+  if("serviceWorker" in navigator){
+    navigator.serviceWorker.register("./service-worker.js").catch(function(){});
+  }
+})();
+</script>
+</body>
+</html>
